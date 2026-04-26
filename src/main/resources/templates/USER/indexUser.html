@@ -1,0 +1,181 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>MediLink - Telemedicina y Consultas</title>
+    <link rel="icon" type="image/x-icon" th:href="@{img/favicon.ico}"> 
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <link th:href="@{/css/styles.css}" rel="stylesheet">
+    </head>
+    <body>
+        
+        <header id="header" class="p-3">
+            <div class="container">
+                
+                <nav class="navbar navbar-expand-lg">
+                    <a class="navbar-brand text-light fs-2 fw-bold" th:href="@{/}" id="logo-bootstrap">MediLink</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/USER/indexUser}">Inicio</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/USER/nosotrosUser}">Nosotros</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/USER/serviciosUser}">Servicios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/USER/citasUser}">Citas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/USER/contactoUser}">Contacto</a>
+                            </li>
+                        </ul>
+                        
+                <div class="d-flex align-items-center">
+
+    
+                     <th:block th:if="${session.usuarioLogueado == null}">
+                         <a th:href="@{/login}" class="btn btn-outline-light me-2 custom-login-btn">Iniciar Sesión</a>
+                         <a th:href="@{/registro}" class="btn btn-primary custom-register-btn">Registrarse</a>
+                      </th:block>
+
+    
+                       <th:block th:if="${session.usuarioLogueado != null}">
+                      <span class="text-light me-3 fw-bold">
+                         Hola, <span th:text="${session.usuarioLogueado.nombre}"></span> 👋
+                         </span>
+                          <a th:href="@{/logout}" class="btn btn-danger">Cerrar Sesión</a>
+                           </th:block>
+
+                      </div>
+                        
+                    </div>
+                </nav>
+
+                <div class="text-center py-5 text-light">
+                    <h1 class="display-4 mb-2">Servicio de telemedicina y consultas medicas.</h1>
+                    <p class="lead">Conectamos tu salud con la tecnología, de manera rápida, segura y accesible.</p>
+                </div>
+
+            </div>
+        </header>
+
+        <section id="features" class="py-5">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="display-5">Descubre nuestros <strong>Servicios Digitales de Salud</strong></h2>
+                </div>
+                
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img th:src="@{/img/telemedicina.jpg}" alt="Atencion de Telemedicina" class="card-img-top" >
+                            <div class="card-body text-center">
+                                <h3 class="card-title">Teleconsulta 24/7</h3>
+                                <p class="card-text">Agenda consultas médicas desde la comodidad de tu casa. Rápido, seguro y accesible.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img th:src="@{/img/especialistas.jpeg}" class="card-img-top" alt="Médicos especialistas">
+                            <div class="card-body text-center">
+                                <h3 class="card-title">Equipo de Especialistas</h3>
+                                <p class="card-text">Acceso a una amplia red de médicos en diversas especialidades, listos para atenderte.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img th:src="@{/img/historial.jpg}" class="card-img-top" alt="Historial médico digital">
+                            <div class="card-body text-center">
+                                <h3 class="card-title">Historial Clínico Digital</h3>
+                                <p class="card-text">Mantén un registro seguro y centralizado de toda tu información y recetas médicas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-5">
+                    <a th:href="@{/serviciosUser}" class="btn btn-primary btn-lg">Ver todos los Servicios</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="main" class="py-5 bg-light">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="p-5 text-center bg-white shadow-sm rounded">
+                            <h2>¿Por qué elegir MediLink?</h2>
+                            <p class="lead mb-4">En MediLink, nuestra misión es simplificar el acceso a la atención médica. Utilizamos tecnología de punta para conectar pacientes con doctores de manera eficiente, garantizando la confidencialidad y la calidad en cada interacción.</p>
+                            <a th:href="@{/nosotrosUser}" class="btn btn-outline-success btn-lg">Conoce al equipo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer id="footer" class="py-5 text-dark">
+            <div class="container">
+                <header class="text-center mb-4">
+                    <h2>¿Preguntas o comentarios? <strong>Contáctanos:</strong></h2>
+                </header>
+                <div class="row">
+                    
+                    <div class="col-md-6 mb-4">
+                        <form method="post" action="#">
+                            <div class="mb-3">
+                                <input name="name" placeholder="Nombre" type="text" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <input name="email" placeholder="Email" type="email" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <textarea name="message" placeholder="Mensaje" class="form-control" rows="4"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                        </form>
+                    </div>
+
+                    <div class="col-md-6">
+                        <p>Estamos comprometidos con tu bienestar. Envíanos un mensaje o encuéntranos en las siguientes direcciones.</p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><strong>Dirección:</strong> 1234 Avenida Principal, Perú</li>
+                                    <li class="mb-2"><strong>Teléfono:</strong> (000) 000-0000</li>
+                                    <li class="mb-2"><strong>Email:</strong> <a href="mailto:info@medilink.tld">info@medilink.tld</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-sm-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><a href="#">@MediLinkPe (Twitter)</a></li>
+                                    <li class="mb-2"><a href="#">facebook.com/MediLink</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="copyright" class="text-center mt-5 pt-3 border-top">
+                <p class="mb-0">&copy; MediLink. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

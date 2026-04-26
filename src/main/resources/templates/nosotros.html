@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>MediLink - Acerca de Nosotros</title>
+    <link rel="icon" type="image/x-icon" th:href="@{/img/favicon.ico}">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body>
+
+<header id="header" class="p-3">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand text-light fs-2 fw-bold" th:href="@{/}" id="logo-bootstrap">MediLink</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" th:href="@{/nosotros}">Nosotros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/servicios}">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/citas}">Citas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/contacto}">Contacto</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center">
+                    <a th:href="@{/login}" class="btn btn-outline-light me-2 custom-login-btn">
+                        Iniciar Sesión
+                    </a>
+                    <a th:href="@{/registro}" class="btn btn-primary custom-register-btn">
+                        Registrarse
+                    </a>
+                </div>
+
+            </div>
+        </nav>
+    </div>
+</header>
+
+<main class="py-5">
+    <div class="container">
+
+        <section class="text-center mb-5 pb-4">
+            <h1 class="display-3 fw-bold" style="color: var(--color-dark);">Conoce la Historia de MediLink</h1>
+            <p class="lead text-muted mx-auto" style="max-width: 800px;">
+                Nacimos de la visión de hacer de la salud un derecho accesible para todos, sin importar la distancia. En un mundo digital, la atención médica de calidad debe estar a un clic de distancia.
+            </p>
+            <hr class="my-4 mx-auto" style="width: 100px; color: var(--color-primary);">
+        </section>
+
+        <section class="row g-4 mb-5">
+            <div class="col-md-6">
+                <div class="card h-100 shadow-lg border-0 p-4" style="background-color: var(--color-background);">
+                    <div class="card-body">
+                        <h2 class="card-title fw-bold" style="color: var(--color-primary);">Nuestra Misión</h2>
+                        <p class="card-text fs-5">
+                            Proveer soluciones de telemedicina innovadoras y seguras que conecten a pacientes y profesionales de la salud, optimizando los recursos y garantizando una atención humana y de alta calidad.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 shadow-lg border-0 p-4" style="background-color: var(--color-primary); color: white;">
+                    <div class="card-body">
+                        <h2 class="card-title fw-bold" style="color: var(--color-light);">Nuestra Visión</h2>
+                        <p class="card-text fs-5">
+                            Ser el ecosistema de salud digital líder en Latinoamérica, redefiniendo la experiencia del paciente y del médico a través de la tecnología y la empatía.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-5 py-4">
+            <h2 class="text-center display-5 fw-bold mb-5">Valores que nos Impulsan</h2>
+            <div class="row text-center">
+                <div class="col-md-4 mb-4">
+                    <h3 class="fs-4 fw-bold mb-3" style="color: var(--color-primary);">Innovación</h3>
+                    <p>Siempre buscamos la forma más avanzada y eficiente de ofrecer servicios de salud a nuestros usuarios.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h3 class="fs-4 fw-bold mb-3" style="color: var(--color-primary);">Empatía</h3>
+                    <p>Ponemos al paciente en el centro de cada decisión, entendiendo sus necesidades con humanidad y respeto.</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h3 class="fs-4 fw-bold mb-3" style="color: var(--color-primary);">Confianza</h3>
+                    <p>Garantizamos la seguridad y confidencialidad de todos los datos clínicos y personales de nuestros usuarios.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-5 bg-light rounded shadow-sm">
+            <h2 class="text-center display-5 fw-bold mb-5" style="color: var(--color-dark);">Conoce a Nuestros Fundadores</h2>
+
+            <div class="row justify-content-center g-4">
+
+                <div class="col-md-4 col-sm-6 text-center">
+                    <img src="https://placehold.co/150x150/4CAF50/ffffff?text=Ana+M" alt="Ana Mendoza" class="rounded-circle mb-3 shadow" width="150" height="150">
+                    <h4 class="fw-bold mb-0">Ana Mendoza</h4>
+                    <p class="text-muted">CEO y Co-Fundadora</p>
+                    <p class="small">Lidera la estrategia tecnológica y operativa, asegurando que MediLink sea la plataforma más robusta y amigable.</p>
+                </div>
+
+                <div class="col-md-4 col-sm-6 text-center">
+                    <img src="https://placehold.co/150x150/4CAF50/ffffff?text=Dr+J" alt="Dr. Javier Soto" class="rounded-circle mb-3 shadow" width="150" height="150">
+                    <h4 class="fw-bold mb-0">Dr. Javier Soto</h4>
+                    <p class="text-muted">Director Médico y Co-Fundador</p>
+                    <p class="small">Supervisa la calidad de la atención médica y la red de especialistas, garantizando la excelencia clínica.</p>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<footer id="footer" class="py-5 text-dark">
+    <div class="container">
+        <header class="text-center mb-4">
+            <h2>¿Preguntas o comentarios? <strong>Contáctanos:</strong></h2>
+        </header>
+        <div class="row">
+
+            <div class="col-md-6 mb-4">
+                <form method="post" action="#">
+                    <div class="mb-3">
+                        <input name="name" placeholder="Nombre" type="text" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <input name="email" placeholder="Email" type="email" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <textarea name="message" placeholder="Mensaje" class="form-control" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                </form>
+            </div>
+
+            <div class="col-md-6">
+                <p>Estamos comprometidos con tu bienestar. Envíanos un mensaje o encuéntranos en las siguientes direcciones.</p>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><strong>Dirección:</strong> 1234 Avenida Principal, Perú</li>
+                            <li class="mb-2"><strong>Teléfono:</strong> (000) 000-0000</li>
+                            <li class="mb-2"><strong>Email:</strong> <a href="mailto:info@medilink.tld">info@medilink.tld</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><a href="#">@MediLinkPe (Twitter)</a></li>
+                            <li class="mb-2"><a href="#">facebook.com/MediLink</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="copyright" class="text-center mt-5 pt-3 border-top">
+        <p class="mb-0">&copy; MediLink. Todos los derechos reservados. | Design base: HTML5 UP</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
