@@ -1,16 +1,11 @@
-# Compiled class file
+# Compiled class files
 *.class
 
-# Log file
+# Log files
 *.log
+*.log.gz
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# Package files
 *.jar
 *.war
 *.nar
@@ -19,6 +14,104 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# Spring Boot fat JAR (los generados por mvn package)
+target/
+!target/*.jar  # Opcional: si quieres versionar el JAR, descomenta
+
+# Maven
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+gradle-app.setting
+**/gradlew
+**/gradlew.bat
+**/build/
+
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.settings/
+.classpath
+.project
+.springBeans
+.sts4-cache
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Eclipse
+*.prefs
+*.launch
+*.metadata
+
+# NetBeans
+nbproject/
+nb-configuration.xml
+build.xml
+manifest.mf
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Application specific
+application-local.properties
+application-dev.properties
+application-*.yml
+!application-example.yml
+*.pid
+*.bak
+
+# Secrets (NUNCA versiones esto)
+*.p12
+*.jks
+*.keystore
+*.truststore
+.secret
+.env
+application-secret.properties
+
+# Actuator / monitoring
+.dockerignore
+*.pid
+
+# Test reports
+test-output/
+surefire-reports/
+failsafe-reports/
+target/surefire-reports/
+
+# Heap dumps
+*.hprof
+*.heap
+
+# Database
+*.db
+*.h2.db
+*.mv.db
+*.trace.db
+*.lock
