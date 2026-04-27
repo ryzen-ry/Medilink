@@ -1,0 +1,89 @@
+/* Importación de fuentes */
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600|Arvo:700');
+
+/* VARIABLES DE COLOR */
+:root {
+    --color-primary: #4CAF50;    /* Verde Principal (Botones, Énfasis) */
+    --color-secondary: #8BC34A;  /* Verde más claro para hover */
+    --color-dark: #004D40;       /* Verde Oscuro (Header/Navbar) */
+    --color-text: #444;          /* Gris Oscuro para texto de cuerpo */
+    --color-light: #fff;         /* Blanco */
+    --color-background: #f7f7f7; /* Fondo ligero */
+
+    /* Variables de Bootstrap sobreescritas con tu color */
+    --bs-primary: var(--color-primary);
+    --bs-success: var(--color-primary);
+    --bs-body-bg: var(--color-background);
+    --bs-font-sans-serif: 'Source Sans Pro', sans-serif;
+    --bs-heading-font-family: 'Arvo', serif;
+}
+
+/* ESTILOS GLOBALES */
+body {
+    font-family: var(--bs-font-sans-serif);
+    line-height: 1.75;
+}
+
+/* HEADER / NAVBAR */
+#header {
+    background-color: var(--color-dark); /* Fondo verde oscuro */
+}
+#logo-bootstrap {
+    font-family: var(--bs-heading-font-family);
+    letter-spacing: 2px;
+}
+.navbar .nav-link {
+    color: var(--color-light); /* Enlaces blancos en el header */
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-left: 1rem;
+    transition: color 0.2s;
+}
+.navbar .nav-link:hover {
+    color: var(--color-primary); /* Verde claro al pasar el ratón */
+}
+/* Ícono de hamburguesa (Toggle) */
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5); 
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Títulos y Encabezados */
+h1, h2, h3, h4 {
+    font-family: var(--bs-heading-font-family);
+    color: var(--color-dark);
+}
+
+/* SECCIÓN MAIN Y FEATURES */
+#features .card {
+    border: 1px solid #ddd;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+#features .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+}
+
+/* BOTONES PERSONALIZADOS DE BOOTSTRAP */
+.btn-primary {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    transition: background-color 0.2s ease-in-out;
+}
+.btn-primary:hover {
+    background-color: var(--color-secondary) !important;
+    border-color: var(--color-secondary) !important;
+}
+
+.btn-outline-success {
+    --bs-btn-color: var(--color-primary);
+    --bs-btn-border-color: var(--color-primary);
+    --bs-btn-hover-bg: var(--color-primary);
+}
+
+/* FOOTER */
+#footer {
+    background-color: #eee;
+}
