@@ -1,5 +1,6 @@
 package com.proyecto.medilink.api.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,10 +10,18 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(description = "Envoltorio genérico para respuestas de API")
 public class ApiResponse<T> {
+    @Schema(description = "Indica si la operación fue exitosa", example = "true")
     private boolean success;
+    
+    @Schema(description = "Mensaje de respuesta", example = "Operación completada exitosamente")
     private String message;
+    
+    @Schema(description = "Datos de la respuesta")
     private T data;
+    
+    @Schema(description = "Marca de tiempo de la respuesta")
     private LocalDateTime timestamp;
 
     public ApiResponse(boolean success, String message, T data) {
