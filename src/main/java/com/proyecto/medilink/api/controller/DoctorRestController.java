@@ -4,6 +4,10 @@ import com.proyecto.medilink.api.response.ApiResponse;
 import com.proyecto.medilink.api.response.DoctorResponse;
 import com.proyecto.medilink.model.Doctor;
 import com.proyecto.medilink.service.DoctorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +20,18 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/doctores")
 @CrossOrigin(origins = "*", maxAge = 3600)
+@Tag(name = "Doctores", description = "Endpoints para gestión de doctores")
 public class DoctorRestController {
 
     @Autowired
     private DoctorService doctorService;
 
     @GetMapping
+    @Operation(summary = "Obtener todos los doctores", description = "Recupera la lista completa de doctores registrados")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Doctores recuperados exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
     public ResponseEntity<ApiResponse<List<DoctorResponse>>> getAllDoctores() {
         try {
             List<DoctorResponse> doctores = doctorService.getAllDoctores().stream()
@@ -35,7 +45,15 @@ public class DoctorRestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<DoctorResponse>> getDoctorById(@PathVariable Long id) {
+    @Operation(summary = "Obtener doctor por ID", description = "Recupera los detalles de un doctor específico")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Doctor encontrado"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Doctor no encontrado"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    public ResponseEntity<ApiResponse<DoctorResponse>> getDoctorById(
+            @io.swagger.v3.oas.annotations.Parameter(description = "ID del doctor")
+            @PathVariable Long id) {
         try {
             Doctor doctor = doctorService.findById(id);
             if (doctor == null) {
@@ -50,7 +68,14 @@ public class DoctorRestController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<DoctorResponse>> createDoctor(@Valid @RequestBody Doctor doctor) {
+    @Operation(summary = "Crear nuevo doctor", description = "Registra un nuevo doctor en el sistema")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "201", description = "Doctor creado exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud inválida")
+    })
+    public ResponseEntity<ApiResponse<DoctorResponse>> createDoctor(
+            @RequestBody(description = "Datos del doctor a crear")
+            @Valid @org.springframework.web.bind.annotation.RequestBody Doctor doctor) {
         try {
             Doctor savedDoctor = doctorService.guardarDoctor(doctor);
             return ResponseEntity.status(HttpStatus.CREATED)
@@ -62,8 +87,17 @@ public class DoctorRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<DoctorResponse>> updateDoctor(@PathVariable Long id,
-                                                                     @Valid @RequestBody Doctor doctorDetails) {
+    @Operation(summary = "Actualizar doctor", description = "Actualiza los datos de un doctor existente")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Doctor actualizado exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Doctor no encontrado"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Solicitud inválida")
+    })
+    public ResponseEntity<ApiResponse<DoctorResponse>> updateDoctor(
+            @io.swagger.v3.oas.annotations.Parameter(description = "ID del doctor")
+            @PathVariable Long id,
+            @RequestBody(description = "Datos actualizados del doctor")
+            @Valid @org.springframework.web.bind.annotation.RequestBody Doctor doctorDetails) {
         try {
             Doctor doctor = doctorService.findById(id);
             if (doctor == null) {
@@ -86,7 +120,15 @@ public class DoctorRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<Void>> deleteDoctor(@PathVariable Long id) {
+    @Operation(summary = "Eliminar doctor", description = "Elimina un doctor del sistema")
+    @ApiResponses(value = {
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Doctor eliminado exitosamente"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Doctor no encontrado"),
+        @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Error al eliminar doctor")
+    })
+    public ResponseEntity<ApiResponse<Void>> deleteDoctor(
+            @io.swagger.v3.oas.annotations.Parameter(description = "ID del doctor")
+            @PathVariable Long id) {
         try {
             Doctor doctor = doctorService.findById(id);
             if (doctor == null) {

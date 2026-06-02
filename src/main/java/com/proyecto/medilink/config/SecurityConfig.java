@@ -50,6 +50,11 @@ public class SecurityConfig {
             .authenticationProvider(authenticationProvider())
 
             .authorizeHttpRequests(auth -> auth
+                // Swagger UI y OpenAPI - públicos
+                .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-ui/**").permitAll()
+                .requestMatchers("/swagger-ui.html").permitAll()
+                
                 // Páginas públicas
                 .requestMatchers("/", "/principal", "/nosotros", "/registro", "/css/**", "/img/**", "/js/**").permitAll()
                 .requestMatchers("/login", "/procesar-login").permitAll()
