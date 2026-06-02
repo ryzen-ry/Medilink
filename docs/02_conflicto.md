@@ -53,4 +53,4 @@ Se trabajó sobre la **nueva versión** del dashboard que incluye sidebar latera
 4. ✅ Se conservaron ambos botones: "Editar" (mío) y "Eliminar" (de él)
 5. ✅ Se mejoró el responsive combinando ambas media queries
 
-al final se opto por conservar los cambios originales  al solucionar el conflicto se hio la verificacion 
+al final se opto por conservar los cambios originales  al solucionar el conflicto se hizo la verificacion 
