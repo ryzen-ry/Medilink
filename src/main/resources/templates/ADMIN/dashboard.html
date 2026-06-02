@@ -3,168 +3,500 @@
 <head>
     <meta charset="UTF-8">
     <title>Dashboard Administrador - MediLink</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #0f766e;
+            --primary-dark: #115e59;
+            --secondary-color: #14b8a6;
+            --danger-color: #dc2626;
+            --bg-color: #f1f5f9;
+            --sidebar-color: #0f172a;
+            --card-color: #ffffff;
+            --text-color: #1e293b;
+            --muted-color: #64748b;
+        }
+
+        body {
+            background: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--sidebar-color), #020617);
+            color: white;
+            padding: 25px 20px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .sidebar .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 35px;
+        }
+
+        .sidebar .brand i {
+            background: var(--secondary-color);
+            color: white;
+            padding: 12px;
+            border-radius: 14px;
+        }
+
+        .sidebar .menu-title {
+            color: #94a3b8;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #cbd5e1;
+            padding: 12px 14px;
+            border-radius: 14px;
+            margin-bottom: 8px;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: rgba(20, 184, 166, 0.15);
+            color: white;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+            padding: 25px 35px;
+        }
+
+        .topbar {
+            background: var(--card-color);
+            border-radius: 22px;
+            padding: 18px 24px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .topbar h2 {
+            font-weight: 700;
+            margin: 0;
+            color: var(--primary-dark);
+        }
+
+        .user-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .custom-card {
+            background: var(--card-color);
+            border: none;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+            padding: 26px;
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+
+        .section-title i {
+            background: #ccfbf1;
+            color: var(--primary-dark);
+            padding: 12px;
+            border-radius: 14px;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: #ecfeff;
+            color: var(--primary-dark);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
+            padding: 14px;
+        }
+
+        .table tbody td {
+            padding: 14px;
+            vertical-align: middle;
+            border-color: #e2e8f0;
+        }
+
+        .table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .badge-role {
+            background: #ccfbf1;
+            color: var(--primary-dark);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .btn-main {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 9px 15px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-main:hover {
+            background: var(--primary-dark);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger-custom {
+            background: #fee2e2;
+            color: var(--danger-color);
+            border: none;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-weight: 600;
+        }
+
+        .btn-danger-custom:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-success-custom {
+            background: #dcfce7;
+            color: #15803d;
+            border: none;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-weight: 600;
+        }
+
+        .btn-success-custom:hover {
+            background: #16a34a;
+            color: white;
+        }
+
+        .form-select {
+            border-radius: 12px;
+            border-color: #cbd5e1;
+        }
+
+        .alert {
+            border-radius: 16px;
+            border: none;
+        }
+
+        .empty-state {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            border-radius: 20px;
+            padding: 35px;
+            text-align: center;
+            color: var(--muted-color);
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            color: var(--secondary-color);
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-height: auto;
+            }
+
+            .layout {
+                flex-direction: column;
+            }
+
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4">
-    <a class="navbar-brand fw-bold text-light" href="#">Administrador</a>
+<div class="layout">
 
-    <div class="ms-auto d-flex align-items-center">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <i class="fa-solid fa-heart-pulse"></i>
+            <span>MediLink</span>
+        </div>
 
-        <span class="text-light fw-bold me-3">
-            👋 Hola, <span th:text="${session.usuarioLogueado.nombre}"></span>
-        </span>
+        <div class="menu-title">Panel administrador</div>
 
-        <a href="/logout" class="btn btn-danger btn-sm">
-            Cerrar Sesión
+        <a href="#" class="active">
+            <i class="fa-solid fa-users"></i>
+            Usuarios
         </a>
 
-    </div>
-</nav>
+        <a th:href="@{/ADMIN/doctores}">
+            <i class="fa-solid fa-user-doctor"></i>
+            Doctores
+        </a>
 
-<div class="container mt-4">
+        <a href="#">
+            <i class="fa-solid fa-chart-line"></i>
+            Reportes
+        </a>
 
-    <div class="card shadow-lg p-4">
+        <a href="#">
+            <i class="fa-solid fa-gear"></i>
+            Configuración
+        </a>
 
-        <h3 class="text-center text-primary mb-4 fw-bold">
-            Gestión de Usuarios
-        </h3>
+        <a href="/logout" class="mt-4">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Cerrar sesión
+        </a>
+    </aside>
 
-        <!-- Mensajes de resultado de acciones -->
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <div>
+                <h2>Dashboard Administrador</h2>
+                <p class="mb-0 text-muted">Gestiona usuarios, doctores y accesos del sistema.</p>
+            </div>
+
+            <div class="user-box">
+                <div class="user-avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div>
+                    <div class="fw-bold">
+                        Hola, <span th:text="${session.usuarioLogueado.nombre}"></span>
+                    </div>
+                    <small class="text-muted">Administrador</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- MENSAJES -->
         <div th:if="${param.success}" class="alert alert-success" role="alert">
+            <i class="fa-solid fa-circle-check me-2"></i>
             Usuario eliminado correctamente.
         </div>
+
         <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            <i class="fa-solid fa-circle-exclamation me-2"></i>
             Ocurrió un error al eliminar el usuario. Por favor revisa el servidor o intenta de nuevo.
         </div>
 
-        <table class="table table-striped table-bordered align-middle text-center">
-            <thead class="table-primary">
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>DNI</th>
-                <th>Teléfono</th>
-                <th>Email</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
+        <!-- USUARIOS -->
+        <section class="custom-card">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fa-solid fa-users-gear"></i>
+                    Gestión de Usuarios
+                </h3>
+            </div>
 
-            <tbody>
-            <tr th:each="usuario : ${usuarios}">
-                <td th:text="${usuario.id}"></td>
-                <td th:text="${usuario.nombre}"></td>
-                <td th:text="${usuario.dni}"></td>
-                <td th:text="${usuario.telefono}"></td>
-                <td th:text="${usuario.email}"></td>
+            <div class="table-responsive">
+                <table class="table align-middle text-center">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>DNI</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
 
-                <td>
-                        <span class="badge bg-info text-dark"
-                              th:text="${usuario.rol.nombre}">
-                        </span>
-                </td>
+                    <tbody>
+                    <tr th:each="usuario : ${usuarios}">
+                        <td class="fw-bold" th:text="${usuario.id}"></td>
+                        <td th:text="${usuario.nombre}"></td>
+                        <td th:text="${usuario.dni}"></td>
+                        <td th:text="${usuario.telefono}"></td>
+                        <td th:text="${usuario.email}"></td>
 
-                <td>
+                        <td>
+                            <span class="badge-role" th:text="${usuario.rol.nombre}"></span>
+                        </td>
 
-                    <!-- ✅ Cambiar rol -->
-                    <form th:action="@{/ADMIN/cambiar-rol/{id}(id=${usuario.id})}"
-                          method="post" class="d-inline">
+                        <td>
+                            <form th:action="@{/ADMIN/cambiar-rol/{id}(id=${usuario.id})}"
+                                  method="post"
+                                  class="d-inline">
 
-                        <select name="nuevoRol" class="form-select form-select-sm mb-1">
-                            <option value="ROLE_USER">ROLE_USER</option>
-                            <option value="ROLE_ADMIN">ROLE_ADMIN</option>
-                        </select>
+                                <select name="nuevoRol" class="form-select form-select-sm mb-2">
+                                    <option value="ROLE_USER">ROLE_USER</option>
+                                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                                </select>
 
-                        <button class="btn btn-sm btn-success w-100" type="submit">
-                            Cambiar Rol
-                        </button>
+                                <button class="btn btn-success-custom btn-sm w-100" type="submit">
+                                    <i class="fa-solid fa-user-shield me-1"></i>
+                                    Cambiar Rol
+                                </button>
+                            </form>
 
-                    </form>
+                            <form th:if="${usuario.email != session.usuarioLogueado.email}"
+                                  th:action="@{/ADMIN/eliminar/{id}(id=${usuario.id})}"
+                                  method="post"
+                                  class="d-inline"
+                                  onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
 
-                    <!-- ✅ Eliminar usuario → NO al admin actual -->
-                    <form th:if="${usuario.email != session.usuarioLogueado.email}"
-                          th:action="@{/ADMIN/eliminar/{id}(id=${usuario.id})}"
-                          method="post"
-                          class="d-inline"
-                          onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
+                                <button class="btn btn-danger-custom btn-sm w-100 mt-2">
+                                    <i class="fa-solid fa-trash me-1"></i>
+                                    Eliminar
+                                </button>
+                            </form>
 
-                        <button class="btn btn-sm btn-danger w-100 mt-1">
-                            Eliminar
-                        </button>
+                            <span th:if="${usuario.email == session.usuarioLogueado.email}"
+                                  class="text-muted fw-bold d-block mt-2">
+                                <i class="fa-solid fa-user-check me-1"></i>
+                                Tú mismo
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-                    </form>
+        <!-- DOCTORES -->
+        <section class="custom-card">
+            <div class="section-header">
+                <h3 class="section-title">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    Doctores Registrados
+                </h3>
 
-                    <!-- ❌ No eliminar a sí mismo -->
-                    <span th:if="${usuario.email == session.usuarioLogueado.email}"
-                          class="text-muted fw-bold d-block mt-2">
-                            (Tú mismo)
-                        </span>
+                <a th:href="@{/ADMIN/doctores}" class="btn btn-main">
+                    <i class="fa-solid fa-plus me-2"></i>
+                    Agregar Doctor
+                </a>
+            </div>
 
-                </td>
-            </tr>
-            </tbody>
+            <div th:if="${#lists.isEmpty(doctores)}" class="empty-state">
+                <i class="fa-solid fa-user-doctor"></i>
+                <h5 class="fw-bold">No hay doctores registrados</h5>
+                <p class="mb-0">Cuando agregues doctores, aparecerán en esta sección.</p>
+            </div>
 
-        </table>
+            <div th:if="${not #lists.isEmpty(doctores)}" class="table-responsive">
+                <table class="table align-middle text-center">
+                    <thead>
+                    <tr>
+                        <th>Nombre Completo</th>
+                        <th>Especialidad</th>
+                        <th>N° Colegiatura</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
 
-    </div>
+                    <tbody>
+                    <tr th:each="doctor : ${doctores}">
+                        <td class="fw-bold" th:text="${doctor.nombre + ' ' + doctor.apellidos}"></td>
+                        <td th:text="${doctor.especialidad}"></td>
+                        <td th:text="${doctor.numeroColegiatura}"></td>
+                        <td th:text="${doctor.email}"></td>
+                        <td th:text="${doctor.telefono}"></td>
 
-    <!-- Sección de Doctores -->
-    <div class="card shadow-lg p-4 mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="text-primary fw-bold mb-0">
-                Doctores Registrados
-            </h3>
-            <a th:href="@{/ADMIN/doctores}" class="btn btn-primary">
-                <i class="fas fa-user-md me-2"></i>
-                Agregar Nuevo Doctor
-            </a>
-        </div>
+                        <td>
+                            <form th:action="@{/ADMIN/doctores/eliminar/{id}(id=${doctor.id})}"
+                                  method="post"
+                                  class="d-inline"
+                                  onsubmit="return confirm('¿Seguro que deseas eliminar este doctor?');">
 
-        <div th:if="${#lists.isEmpty(doctores)}" class="alert alert-info text-center">
-            No hay doctores registrados aún.
-        </div>
+                                <button type="submit" class="btn btn-danger-custom btn-sm">
+                                    <i class="fa-solid fa-trash me-1"></i>
+                                    Eliminar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-        <div th:if="${not #lists.isEmpty(doctores)}" class="table-responsive">
-            <table class="table table-striped table-bordered align-middle text-center">
-                <thead class="table-primary">
-                <tr>
-                    <th>Nombre Completo</th>
-                    <th>Especialidad</th>
-                    <th>N° Colegiatura</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="doctor : ${doctores}">
-                    <td th:text="${doctor.nombre + ' ' + doctor.apellidos}"></td>
-                    <td th:text="${doctor.especialidad}"></td>
-                    <td th:text="${doctor.numeroColegiatura}"></td>
-                    <td th:text="${doctor.email}"></td>
-                    <td th:text="${doctor.telefono}"></td>
-                    <td>
-                        <form th:action="@{/ADMIN/doctores/eliminar/{id}(id=${doctor.id})}"
-                              method="post"
-                              class="d-inline"
-                              onsubmit="return confirm('¿Seguro que deseas eliminar este doctor?');">
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash me-1"></i>
-                                Eliminar
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    </main>
 </div>
 
-<script src="https://kit.fontawesome.com/your-code.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
