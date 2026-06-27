@@ -46,30 +46,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf.disable()) // si quieres CSRF habilitado, habría que adaptar formulario
             .authenticationProvider(authenticationProvider())
 
             .authorizeHttpRequests(auth -> auth
-                // Swagger UI y OpenAPI - públicos
-                .requestMatchers("/v3/api-docs/**").permitAll()
-                .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/swagger-ui.html").permitAll()
-                
-                // Páginas públicas
                 .requestMatchers("/", "/principal", "/nosotros", "/registro", "/css/**", "/img/**", "/js/**").permitAll()
                 .requestMatchers("/login", "/procesar-login").permitAll()
-                
-                // API REST - Endpoints públicos
-                .requestMatchers("/api/v1/doctores").permitAll()
-                .requestMatchers("/api/v1/doctores/**").permitAll()
-                .requestMatchers("/api/v1/citas").permitAll()
-                .requestMatchers("/api/v1/citas/**").permitAll()
-                .requestMatchers("/api/v1/usuarios").permitAll()
-                .requestMatchers("/api/v1/usuarios/**").permitAll()
-                .requestMatchers("/api/v1/auth/login").permitAll()
-                .requestMatchers("/api/v1/auth/logout").permitAll()
-                
-                // Rutas protegidas
                 .requestMatchers("/ADMIN/**").hasRole("ADMIN")
                 .requestMatchers("/USER/**").hasRole("USER")
                 .anyRequest().authenticated()
@@ -77,9 +59,9 @@ public class SecurityConfig {
 
             .formLogin(form -> form
                 .loginPage("/login")
-                .loginProcessingUrl("/procesar-login")
-                .usernameParameter("email")
-                .passwordParameter("password")
+                .loginProcessingUrl("/procesar-login")   // la URL que procesa el POST
+                .usernameParameter("email")              // <-- IMPORTANTE: tu campo es 'email'
+                .passwordParameter("password")           // por defecto 'password' está bien
                 .defaultSuccessUrl("/redireccion", true)
                 .failureUrl("/login?error")
                 .permitAll()
