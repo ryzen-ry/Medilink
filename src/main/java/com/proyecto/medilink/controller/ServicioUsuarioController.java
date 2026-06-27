@@ -162,8 +162,20 @@ public String guardarCitaFormulario(
     return "redirect:/USER/citasUser?success";
 }
 
+// ✅ Cancelar cita por el propio usuario (si está PENDIENTE)
+@PostMapping("/citas/cancelar/{id}")
+public String cancelarCitaUsuario(@PathVariable Long id, HttpSession session) {
+    Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+    if (u == null) return "redirect:/login";
 
+    Cita cita = citaService.obtenerPorId(id);
+    if (cita != null && cita.getUsuario().getId().equals(u.getId()) && "PENDIENTE".equals(cita.getEstado())) {
+        cita.setEstado("CANCELADA");
+        citaService.guardar(cita);
+        return "redirect:/USER/serviciosUser?successCancelCita";
+    }
 
+    return "redirect:/USER/serviciosUser?errorCancelCita";
+}
 
-    
 }

@@ -2,169 +2,565 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard Administrador - MediLink</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - MediLink</title>
+    
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Estilos Personalizados del Dashboard -->
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-sidebar: #0f172a;
+            --bg-main: #f8fafc;
+            --border-color: #e2e8f0;
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            overflow-x: hidden;
+        }
+
+        /* Estructura Layout */
+        .wrapper {
+            display: flex;
+            width: 100%;
+            align-items: stretch;
+            min-height: 100vh;
+        }
+
+        #sidebar {
+            min-width: 280px;
+            max-width: 280px;
+            background: var(--bg-sidebar);
+            color: #94a3b8;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #sidebar .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #sidebar .sidebar-brand {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #sidebar ul.components {
+            padding: 1.5rem 0;
+        }
+
+        #sidebar ul li {
+            padding: 0.2rem 1rem;
+        }
+
+        #sidebar ul li a {
+            padding: 0.8rem 1rem;
+            font-size: 0.95rem;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            font-weight: 500;
+        }
+
+        #sidebar ul li a:hover, #sidebar ul li.active a {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        #sidebar ul li.active a {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        #content {
+            width: 100%;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        /* Header del Contenido */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Tarjetas de Resumen (Widgets) */
+        .widget-card {
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .widget-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .widget-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .icon-users { background: rgba(37, 99, 235, 0.1); color: var(--primary); }
+        .icon-doctors { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .icon-appointments { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+
+        /* Panel Cards */
+        .panel-card {
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .table-responsive {
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background-color: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .table td {
+            padding: 1rem 1.5rem;
+            color: #334155;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        /* Badges de Estado */
+        .badge-pendiente {
+            background-color: rgba(245, 158, 11, 0.12) !important;
+            color: var(--warning) !important;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            padding: 0.35em 0.65em;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .badge-confirmada {
+            background-color: rgba(16, 185, 129, 0.12) !important;
+            color: var(--success) !important;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 0.35em 0.65em;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .badge-cancelada {
+            background-color: rgba(239, 68, 68, 0.12) !important;
+            color: var(--danger) !important;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 0.35em 0.65em;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+    </style>
 </head>
+<body>
 
-<body class="bg-light">
-
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary px-4">
-    <a class="navbar-brand fw-bold text-light" href="#">Administrador</a>
-
-    <div class="ms-auto d-flex align-items-center">
-
-        <span class="text-light fw-bold me-3">
-            👋 Hola, <span th:text="${session.usuarioLogueado.nombre}"></span>
-        </span>
-
-        <a href="/logout" class="btn btn-danger btn-sm">
-            Cerrar Sesión
-        </a>
-
-    </div>
-</nav>
-
-<div class="container mt-4">
-
-    <div class="card shadow-lg p-4">
-
-        <h3 class="text-center text-primary mb-4 fw-bold">
-            Gestión de Usuarios
-        </h3>
-
-        <!-- Mensajes de resultado de acciones -->
-        <div th:if="${param.success}" class="alert alert-success" role="alert">
-            Usuario eliminado correctamente.
-        </div>
-        <div th:if="${param.error}" class="alert alert-danger" role="alert">
-            Ocurrió un error al eliminar el usuario. Por favor revisa el servidor o intenta de nuevo.
-        </div>
-
-        <table class="table table-striped table-bordered align-middle text-center">
-            <thead class="table-primary">
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>DNI</th>
-                <th>Teléfono</th>
-                <th>Email</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr th:each="usuario : ${usuarios}">
-                <td th:text="${usuario.id}"></td>
-                <td th:text="${usuario.nombre}"></td>
-                <td th:text="${usuario.dni}"></td>
-                <td th:text="${usuario.telefono}"></td>
-                <td th:text="${usuario.email}"></td>
-
-                <td>
-                        <span class="badge bg-info text-dark"
-                              th:text="${usuario.rol.nombre}">
-                        </span>
-                </td>
-
-                <td>
-
-                    <!-- ✅ Cambiar rol -->
-                    <form th:action="@{/ADMIN/cambiar-rol/{id}(id=${usuario.id})}"
-                          method="post" class="d-inline">
-
-                        <select name="nuevoRol" class="form-select form-select-sm mb-1">
-                            <option value="ROLE_USER">ROLE_USER</option>
-                            <option value="ROLE_ADMIN">ROLE_ADMIN</option>
-                        </select>
-
-                        <button class="btn btn-sm btn-success w-100" type="submit">
-                            Cambiar Rol
-                        </button>
-
-                    </form>
-
-                    <!-- ✅ Eliminar usuario → NO al admin actual -->
-                    <form th:if="${usuario.email != session.usuarioLogueado.email}"
-                          th:action="@{/ADMIN/eliminar/{id}(id=${usuario.id})}"
-                          method="post"
-                          class="d-inline"
-                          onsubmit="return confirm('¿Seguro que deseas eliminar este usuario?');">
-
-                        <button class="btn btn-sm btn-danger w-100 mt-1">
-                            Eliminar
-                        </button>
-
-                    </form>
-
-                    <!-- ❌ No eliminar a sí mismo -->
-                    <span th:if="${usuario.email == session.usuarioLogueado.email}"
-                          class="text-muted fw-bold d-block mt-2">
-                            (Tú mismo)
-                        </span>
-
-                </td>
-            </tr>
-            </tbody>
-
-        </table>
-
-    </div>
-
-    <!-- Sección de Doctores -->
-    <div class="card shadow-lg p-4 mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="text-primary fw-bold mb-0">
-                Doctores Registrados
-            </h3>
-            <a th:href="@{/ADMIN/doctores}" class="btn btn-primary">
-                <i class="fas fa-user-md me-2"></i>
-                Agregar Nuevo Doctor
+<div class="wrapper">
+    <!-- BARRA LATERAL -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">
+                <i class="fa-solid fa-square-h text-primary"></i>
+                <span>MediLink Admin</span>
             </a>
         </div>
 
-        <div th:if="${#lists.isEmpty(doctores)}" class="alert alert-info text-center">
-            No hay doctores registrados aún.
+        <ul class="list-unstyled components">
+            <li class="active" id="li-usuarios">
+                <a href="#" onclick="switchTab('usuarios')">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Gestión de Usuarios</span>
+                </a>
+            </li>
+            <li id="li-citas">
+                <a href="#" onclick="switchTab('citas')">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>Gestión de Citas</span>
+                </a>
+            </li>
+            <li id="li-doctores">
+                <a href="#" onclick="switchTab('doctores')">
+                    <i class="fa-solid fa-user-md"></i>
+                    <span>Doctores Registrados</span>
+                </a>
+            </li>
+            <li id="li-historial">
+                <a href="#" onclick="switchTab('historial')">
+                    <i class="fa-solid fa-file-medical"></i>
+                    <span>Historial Clínico</span>
+                </a>
+            </li>
+        </ul>
+        
+        <div class="mt-auto p-4 border-top border-secondary-subtle">
+            <a href="/logout" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Cerrar Sesión</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <div id="content">
+        <div class="content-header">
+            <div>
+                <h4 class="mb-0 fw-bold">Panel de Administración</h4>
+                <p class="text-muted small mb-0" th:text="'Bienvenido de nuevo, ' + ${session.usuarioLogueado.nombre}"></p>
+            </div>
+            
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-dark fw-semibold" th:text="${session.usuarioLogueado.email}"></span>
+                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; font-weight:700;">A</div>
+            </div>
         </div>
 
-        <div th:if="${not #lists.isEmpty(doctores)}" class="table-responsive">
-            <table class="table table-striped table-bordered align-middle text-center">
-                <thead class="table-primary">
-                <tr>
-                    <th>Nombre Completo</th>
-                    <th>Especialidad</th>
-                    <th>N° Colegiatura</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="doctor : ${doctores}">
-                    <td th:text="${doctor.nombre + ' ' + doctor.apellidos}"></td>
-                    <td th:text="${doctor.especialidad}"></td>
-                    <td th:text="${doctor.numeroColegiatura}"></td>
-                    <td th:text="${doctor.email}"></td>
-                    <td th:text="${doctor.telefono}"></td>
-                    <td>
-                        <form th:action="@{/ADMIN/doctores/eliminar/{id}(id=${doctor.id})}"
-                              method="post"
-                              class="d-inline"
-                              onsubmit="return confirm('¿Seguro que deseas eliminar este doctor?');">
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                <i class="fas fa-trash me-1"></i>
-                                Eliminar
+        <!-- Módulos de Mensajes -->
+        <div th:if="${param.success == 'deleted'}" class="alert alert-success alert-dismissible fade show" role="alert">
+            Usuario eliminado correctamente.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${param.success == 'appointment_confirmed'}" class="alert alert-success alert-dismissible fade show" role="alert">
+            Cita médica confirmada y doctor asignado correctamente.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${param.success == 'appointment_canceled'}" class="alert alert-warning alert-dismissible fade show" role="alert">
+            Cita médica cancelada correctamente.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${param.success == 'exam_added'}" class="alert alert-success alert-dismissible fade show" role="alert">
+            Examen clínico registrado con éxito en el historial del paciente.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            Ocurrió un error al procesar la solicitud. Por favor, intente de nuevo.
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- WIDGETS DE RESUMEN -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-4">
+                <div class="widget-card">
+                    <div>
+                        <span class="text-muted small fw-semibold uppercase">Usuarios Activos</span>
+                        <h3 class="mb-0 mt-1 fw-bold" th:text="${#lists.size(usuarios)}">0</h3>
+                    </div>
+                    <div class="widget-icon icon-users">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="widget-card">
+                    <div>
+                        <span class="text-muted small fw-semibold uppercase">Médicos Registrados</span>
+                        <h3 class="mb-0 mt-1 fw-bold" th:text="${#lists.size(doctores)}">0</h3>
+                    </div>
+                    <div class="widget-icon icon-doctors">
+                        <i class="fa-solid fa-user-md"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="widget-card">
+                    <div>
+                        <span class="text-muted small fw-semibold uppercase">Total Citas Clínicas</span>
+                        <h3 class="mb-0 mt-1 fw-bold" th:text="${#lists.size(citas)}">0</h3>
+                    </div>
+                    <div class="widget-icon icon-appointments">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PESTAÑA: USUARIOS ================= -->
+        <div id="tab-usuarios" class="tab-pane">
+            <div class="panel-card">
+                <h4 class="fw-bold mb-4 text-primary">Gestión de Usuarios del Sistema</h4>
+                <div class="table-responsive">
+                    <table class="table align-middle text-center table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre Completo</th>
+                                <th>DNI</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Rol Actual</th>
+                                <th>Acción Rol</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="usuario : ${usuarios}">
+                                <td th:text="${usuario.id}"></td>
+                                <td class="fw-semibold text-dark" th:text="${usuario.nombre}"></td>
+                                <td th:text="${usuario.dni}"></td>
+                                <td th:text="${usuario.telefono}"></td>
+                                <td th:text="${usuario.email}"></td>
+                                <td>
+                                    <span class="badge bg-secondary text-white fw-semibold" th:text="${usuario.rol.nombre}"></span>
+                                </td>
+                                <td>
+                                    <form th:action="@{/ADMIN/cambiar-rol/{id}(id=${usuario.id})}" method="post" class="d-inline-flex gap-2 align-items-center">
+                                        <select name="nuevoRol" class="form-select form-select-sm" style="width: auto;">
+                                            <option value="ROLE_USER" th:selected="${usuario.rol.nombre == 'ROLE_USER'}">Usuario</option>
+                                            <option value="ROLE_ADMIN" th:selected="${usuario.rol.nombre == 'ROLE_ADMIN'}">Admin</option>
+                                        </select>
+                                        <button class="btn btn-sm btn-primary py-1 px-2" type="submit">Actualizar</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <span th:if="${usuario.email == session.usuarioLogueado.email}" class="text-muted small fw-semibold">Tú mismo</span>
+                                    <form th:if="${usuario.email != session.usuarioLogueado.email}" th:action="@{/ADMIN/eliminar/{id}(id=${usuario.id})}" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar a este usuario?');">
+                                        <button class="btn btn-sm btn-outline-danger py-1 px-2" type="submit">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PESTAÑA: CITAS ================= -->
+        <div id="tab-citas" class="tab-pane d-none">
+            <div class="panel-card">
+                <h4 class="fw-bold mb-4 text-primary">Gestión de Citas Médicas</h4>
+                <div th:if="${#lists.isEmpty(citas)}" class="alert alert-info text-center py-4">
+                    No hay solicitudes de citas registradas en el sistema.
+                </div>
+                
+                <div th:if="${not #lists.isEmpty(citas)}" class="table-responsive">
+                    <table class="table align-middle text-center table-hover">
+                        <thead>
+                            <tr>
+                                <th>Paciente</th>
+                                <th>Especialidad</th>
+                                <th>Fecha Cita</th>
+                                <th>Motivo</th>
+                                <th>Estado</th>
+                                <th>Médico Asignado</th>
+                                <th>Acción Administrador</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="cita : ${citas}">
+                                <td>
+                                    <div class="fw-bold text-dark" th:text="${cita.nombrePaciente}"></div>
+                                    <div class="text-muted small" th:text="${cita.emailPaciente}"></div>
+                                </td>
+                                <td class="fw-semibold text-primary text-uppercase" th:text="${cita.especialidad}"></td>
+                                <td th:text="${cita.fecha}"></td>
+                                <td class="text-start" style="max-width: 200px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" th:text="${cita.motivo}"></td>
+                                <td>
+                                    <span th:if="${cita.estado == 'PENDIENTE'}" class="badge-pendiente">PENDIENTE</span>
+                                    <span th:if="${cita.estado == 'CONFIRMADA'}" class="badge-confirmada">CONFIRMADA</span>
+                                    <span th:if="${cita.estado == 'CANCELADA'}" class="badge-cancelada">CANCELADA</span>
+                                </td>
+                                <td class="fw-semibold">
+                                    <span th:if="${cita.doctor != null}" th:text="'Dr. ' + ${cita.doctor.nombre} + ' ' + ${cita.doctor.apellidos}"></span>
+                                    <span th:if="${cita.doctor == null}" class="text-muted small">No asignado</span>
+                                </td>
+                                <td>
+                                    <div th:if="${cita.estado == 'PENDIENTE'}" class="d-flex flex-column gap-2 align-items-center">
+                                        <form th:action="@{/ADMIN/citas/confirmar/{id}(id=${cita.id})}" method="post" class="d-flex gap-1 align-items-center">
+                                            <select name="doctorId" class="form-select form-select-sm" required style="width: 150px;">
+                                                <option value="" disabled selected>Elegir Médico</option>
+                                                <option th:each="doc : ${doctores}" th:value="${doc.id}" th:text="'Dr. ' + ${doc.nombre} + ' ' + ${doc.apellidos}"></option>
+                                            </select>
+                                            <button class="btn btn-sm btn-success py-1" type="submit">Confirmar</button>
+                                        </form>
+                                        <form th:action="@{/ADMIN/citas/cancelar/{id}(id=${cita.id})}" method="post">
+                                            <button class="btn btn-sm btn-danger py-1 w-100" type="submit">Cancelar Cita</button>
+                                        </form>
+                                    </div>
+                                    <span th:if="${cita.estado != 'PENDIENTE'}" class="text-muted small">Sin acciones pendientes</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PESTAÑA: DOCTORES ================= -->
+        <div id="tab-doctores" class="tab-pane d-none">
+            <div class="panel-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="fw-bold text-primary mb-0">Listado de Doctores Registrados</h4>
+                    <a th:href="@{/ADMIN/doctores}" class="btn btn-primary btn-sm d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-plus-circle"></i>
+                        <span>Agregar Nuevo Doctor</span>
+                    </a>
+                </div>
+                
+                <div th:if="${#lists.isEmpty(doctores)}" class="alert alert-info text-center py-4">
+                    No hay doctores registrados en el sistema.
+                </div>
+
+                <div th:if="${not #lists.isEmpty(doctores)}" class="table-responsive">
+                    <table class="table align-middle text-center table-hover">
+                        <thead>
+                            <tr>
+                                <th>Foto</th>
+                                <th>Nombre y Apellidos</th>
+                                <th>Especialidad</th>
+                                <th>N° Colegiatura</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="doctor : ${doctores}">
+                                <td>
+                                    <img th:if="${doctor.imagen != null}" th:src="@{/img/doctors/} + ${doctor.imagen}" alt="Foto" style="width:48px;height:48px;object-fit:cover;border-radius:50%;border: 2px solid var(--primary);"/>
+                                    <div th:if="${doctor.imagen == null}" class="bg-secondary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 48px; height: 48px; font-weight:700;">D</div>
+                                </td>
+                                <td class="fw-bold text-dark" th:text="${doctor.nombre + ' ' + doctor.apellidos}"></td>
+                                <td class="fw-semibold text-success text-uppercase" th:text="${doctor.especialidad}"></td>
+                                <td th:text="${doctor.numeroColegiatura}"></td>
+                                <td th:text="${doctor.email}"></td>
+                                <td th:text="${doctor.telefono}"></td>
+                                <td>
+                                    <form th:action="@{/ADMIN/doctores/eliminar/{id}(id=${doctor.id})}" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar este doctor?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger py-1 px-2">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PESTAÑA: HISTORIAL CLÍNICO ================= -->
+        <div id="tab-historial" class="tab-pane d-none">
+            <div class="row">
+                <div class="col-lg-6 mx-auto">
+                    <div class="panel-card">
+                        <h4 class="fw-bold mb-4 text-primary text-center">Registrar Examen Médico</h4>
+                        <p class="text-muted text-center small mb-4">Añade los resultados de exámenes, diagnósticos o recetas médicas al historial de un paciente.</p>
+                        
+                        <form th:action="@{/ADMIN/usuarios/examenes/agregar}" method="post">
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Seleccionar Paciente</label>
+                                <select name="usuarioId" class="form-select" required>
+                                    <option value="" disabled selected>-- Elija un paciente --</option>
+                                    <option th:each="usr : ${usuarios}" th:if="${usr.rol.nombre == 'ROLE_USER'}" th:value="${usr.id}" th:text="${usr.nombre} + ' (DNI: ' + ${usr.dni} + ')'"></option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Tipo de Examen / Diagnóstico</label>
+                                <input type="text" name="tipo" class="form-control" placeholder="Ej: Análisis de Sangre, Ecografía, Receta de Medicamentos" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold">Resultado / Descripción médica</label>
+                                <textarea name="descripcion" class="form-control" rows="4" placeholder="Detalla los resultados del examen, indicaciones médicas o diagnóstico completo..." required></textarea>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Fecha de Emisión</label>
+                                <input type="date" name="fecha" class="form-control" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-2">
+                                <i class="fa-solid fa-file-shield me-2"></i> Guardar en Historial Clínico
                             </button>
                         </form>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
 
-<script src="https://kit.fontawesome.com/your-code.js"></script>
+<!-- JS Bootstrap y Lógica del Panel -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function switchTab(tabId) {
+        // Ocultar todos los panes
+        document.querySelectorAll('.tab-pane').forEach(function(pane) {
+            pane.classList.add('d-none');
+        });
+        
+        // Quitar clase activa del sidebar
+        document.querySelectorAll('#sidebar ul.components li').forEach(function(li) {
+            li.classList.remove('active');
+        });
+        
+        // Mostrar pane seleccionado
+        document.getElementById('tab-' + tabId).classList.remove('d-none');
+        
+        // Colocar clase activa en el sidebar
+        document.getElementById('li-' + tabId).classList.add('active');
+    }
+</script>
 </body>
 </html>

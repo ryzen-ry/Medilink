@@ -2,8 +2,12 @@ package com.proyecto.medilink.controller;
 
 import com.proyecto.medilink.model.Doctor;
 import com.proyecto.medilink.model.Usuario;
+import com.proyecto.medilink.model.Cita;
+import com.proyecto.medilink.model.Examen;
 import com.proyecto.medilink.service.DoctorService;
 import com.proyecto.medilink.service.UsuarioService;
+import com.proyecto.medilink.service.CitaService;
+import com.proyecto.medilink.service.ExamenService;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping("/ADMIN")
@@ -22,6 +27,12 @@ public class AdminController {
 
     @Autowired
     private DoctorService doctorService;
+
+    @Autowired
+    private CitaService citaService;
+
+    @Autowired
+    private ExamenService examenService;
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
@@ -34,6 +45,7 @@ public class AdminController {
         model.addAttribute("usuarioLogueado", u);
         model.addAttribute("usuarios", usuarioService.getAll());
         model.addAttribute("doctores", doctorService.getAllDoctores()); // Añadir lista de doctores
+        model.addAttribute("citas", citaService.listarTodas()); // Añadir lista de citas
 
         return "ADMIN/dashboard";
     }
@@ -145,5 +157,75 @@ public class AdminController {
         } catch (Exception e) {
             return "redirect:/ADMIN/doctores?error=delete_failed";
         }
+    }
+
+    // ✅ Confirmar Cita asignando un doctor
+    @PostMapping("/citas/confirmar/{id}")
+    public String confirmarCita(@PathVariable Long id, @RequestParam Long doctorId, HttpSession session) {
+        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
+            return "redirect:/login";
+        }
+
+        Cita cita = citaService.obtenerPorId(id);
+        Doctor doctor = doctorService.getAllDoctores().stream()
+                .filter(d -> d.getId().equals(doctorId))
+                .findFirst().orElse(null);
+
+        if (cita != null && doctor != null) {
+            cita.setEstado("CONFIRMADA");
+            cita.setDoctor(doctor);
+            citaService.guardar(cita);
+            return "redirect:/ADMIN/dashboard?success=appointment_confirmed";
+        }
+
+        return "redirect:/ADMIN/dashboard?error=appointment_confirmation_failed";
+    }
+
+    // ✅ Cancelar Cita
+    @PostMapping("/citas/cancelar/{id}")
+    public String cancelarCita(@PathVariable Long id, HttpSession session) {
+        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
+            return "redirect:/login";
+        }
+
+        Cita cita = citaService.obtenerPorId(id);
+        if (cita != null) {
+            cita.setEstado("CANCELADA");
+            citaService.guardar(cita);
+            return "redirect:/ADMIN/dashboard?success=appointment_canceled";
+        }
+
+        return "redirect:/ADMIN/dashboard?error=appointment_cancelation_failed";
+    }
+
+    // ✅ Registrar Examen Clínico para un Usuario
+    @PostMapping("/usuarios/examenes/agregar")
+    public String agregarExamen(@RequestParam Long usuarioId,
+                                 @RequestParam String tipo,
+                                 @RequestParam String descripcion,
+                                 @RequestParam String fecha,
+                                 HttpSession session) {
+        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
+            return "redirect:/login";
+        }
+
+        Usuario paciente = usuarioService.getAll().stream()
+                .filter(usr -> usr.getId().equals(usuarioId))
+                .findFirst().orElse(null);
+
+        if (paciente != null) {
+            Examen examen = new Examen();
+            examen.setUsuario(paciente);
+            examen.setTipo(tipo);
+            examen.setDescripcion(descripcion);
+            examen.setFecha(LocalDate.parse(fecha));
+            examenService.guardar(examen);
+            return "redirect:/ADMIN/dashboard?success=exam_added";
+        }
+
+        return "redirect:/ADMIN/dashboard?error=exam_add_failed";
     }
 }

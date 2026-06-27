@@ -23,4 +23,16 @@ public class CitaService {
     public List<Cita> listarPorUsuario(Usuario usuario) {
         return repo.findByUsuario(usuario);
     }
+
+    public List<Cita> listarTodas() {
+        return repo.findAll();
+    }
+
+    public Cita obtenerPorId(Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    public void eliminarCita(Long id) {
+        repo.deleteById(id);
+    }
 }

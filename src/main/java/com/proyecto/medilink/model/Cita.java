@@ -46,6 +46,11 @@ public class Cita {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
+    // Relación con Doctor (asignado al confirmar la cita)
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+
     // Metadatos
     private String estado; // p.ej. PENDIENTE, CONFIRMADA, CANCELADA
 
