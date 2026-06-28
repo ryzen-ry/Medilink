@@ -74,7 +74,7 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/prueba?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           SPRING_DATASOURCE_USERNAME: root
           SPRING_DATASOURCE_PASSWORD: 12345678
-        run: mvn -B clean verify sonar:sonar -Pcoverage
+        run: mvn -B clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Pcoverage
 
       # ================================================
       # ✅ (OPCIONAL) SUBIR EL REPORTE COMO ARTEFACTO
