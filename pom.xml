@@ -134,6 +134,23 @@
 				</configuration>
 			</plugin>
 
+			<!-- ============================================= -->
+			<!-- ✅ JACOCO EN EL BUILD PRINCIPAL               -->
+			<!-- ============================================= -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- ✅ PLUGIN DE SONAR MAVEN -->
 			<plugin>
 				<groupId>org.sonarsource.scanner.maven</groupId>
@@ -156,12 +173,6 @@
 						<artifactId>jacoco-maven-plugin</artifactId>
 						<version>${jacoco.version}</version>
 						<executions>
-							<execution>
-								<id>prepare-agent</id>
-								<goals>
-									<goal>prepare-agent</goal>
-								</goals>
-							</execution>
 							<execution>
 								<id>report</id>
 								<goals>
