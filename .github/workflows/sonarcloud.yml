@@ -95,7 +95,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=medilinks
+            -Dsonar.projectKey=medilink
             -Dsonar.organization=ryzen-ry
             -Dsonar.java.binaries=target/classes
             -Dsonar.java.test.binaries=target/test-classes
