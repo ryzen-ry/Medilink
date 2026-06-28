@@ -51,9 +51,6 @@ jobs:
           SPRING_DATASOURCE_USERNAME: root
           SPRING_DATASOURCE_PASSWORD: 12345678
 
-      # ============================================================
-      # ✅ VERIFICAR QUE EL XML DE JACOCO EXISTE
-      # ============================================================
       - name: Verify Jacoco report exists
         run: |
           echo "=== Archivos en target/site/jacoco/ ==="
@@ -61,9 +58,6 @@ jobs:
           echo "=== Primeras líneas del XML ==="
           cat target/site/jacoco/jacoco.xml | head -20 || echo "❌ El archivo XML no existe"
 
-      # ============================================================
-      # ✅ SONARCLOUD CON RUTA ABSOLUTA
-      # ============================================================
       - name: SonarCloud analysis
         uses: SonarSource/sonarcloud-github-action@v2.2.0
         env:
@@ -71,7 +65,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=Medilink
-            -Dsonar.organization=ryzen-ry
+            -Dsonar.organization=ryzen-ry_medilinksoluciones
             -Dsonar.java.binaries=target/classes
             -Dsonar.java.test.binaries=target/test-classes
             -Dsonar.sources=src/main/java
