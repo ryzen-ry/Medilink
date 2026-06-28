@@ -36,7 +36,7 @@
 		<!-- ✅ Configuración de SonarCloud -->
 		<sonar.organization>ryzen-ry</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-		<sonar.projectKey>medilink</sonar.projectKey>
+		<sonar.projectKey>Medilink</sonar.projectKey>
 		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 	<dependencies>
