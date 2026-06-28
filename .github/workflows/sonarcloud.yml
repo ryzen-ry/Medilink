@@ -65,7 +65,7 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=medilinkSoluciones
-            -Dsonar.organization=ryzen-ry_medilinksoluciones
+            -Dsonar.organization=ryzen-ry
             -Dsonar.java.binaries=target/classes
             -Dsonar.java.test.binaries=target/test-classes
             -Dsonar.sources=src/main/java
