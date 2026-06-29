@@ -22,6 +22,12 @@ import java.time.LocalDate;
 @RequestMapping("/ADMIN")
 public class AdminController {
 
+    private static final String USUARIO_LOGUEADO = "usuarioLogueado";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String REDIRECT_LOGIN = "redirect:/login";
+    private static final String DOCTORES = "doctores";
+    private static final String GESTION_DOCTORES = "ADMIN/gestionDoctores";
+
     @Autowired
     private UsuarioService usuarioService;
 
@@ -36,16 +42,16 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
 
-        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
-            return "redirect:/login";
+        if (u == null || !u.getRol().getNombre().equals(ROLE_ADMIN)) {
+            return REDIRECT_LOGIN;
         }
 
-        model.addAttribute("usuarioLogueado", u);
+        model.addAttribute(USUARIO_LOGUEADO, u);
         model.addAttribute("usuarios", usuarioService.getAll());
-        model.addAttribute("doctores", doctorService.getAllDoctores()); // Añadir lista de doctores
-        model.addAttribute("citas", citaService.listarTodas()); // Añadir lista de citas
+        model.addAttribute(DOCTORES, doctorService.getAllDoctores());
+        model.addAttribute("citas", citaService.listarTodas());
 
         return "ADMIN/dashboard";
     }
@@ -53,13 +59,12 @@ public class AdminController {
 
     @GetMapping("/usuarios")
     public String listarUsuarios(HttpSession session, Model model) {
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
 
-        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
-            return "redirect:/login";
+        if (u == null || !u.getRol().getNombre().equals(ROLE_ADMIN)) {
+            return REDIRECT_LOGIN;
         }
 
-        // Redirigir al dashboard que ya muestra la lista de usuarios
         return "redirect:/ADMIN/dashboard";
     }
 
@@ -68,10 +73,10 @@ public class AdminController {
                              @RequestParam String nuevoRol,
                              HttpSession session) {
 
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
 
-        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
-            return "redirect:/login";
+        if (u == null || !u.getRol().getNombre().equals(ROLE_ADMIN)) {
+            return REDIRECT_LOGIN;
         }
 
         usuarioService.cambiarRol(id, nuevoRol);
@@ -82,10 +87,10 @@ public class AdminController {
     public String eliminarUsuario(@PathVariable Long id,
                                   HttpSession session) {
 
-        Usuario adminActual = (Usuario) session.getAttribute("usuarioLogueado");
+        Usuario adminActual = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
 
-        if (adminActual == null || !adminActual.getRol().getNombre().equals("ROLE_ADMIN")) {
-            return "redirect:/login";
+        if (adminActual == null || !adminActual.getRol().getNombre().equals(ROLE_ADMIN)) {
+            return REDIRECT_LOGIN;
         }
 
         try {
@@ -95,22 +100,21 @@ public class AdminController {
             }
             return "redirect:/ADMIN/dashboard?success=deleted";
         } catch (Exception e) {
-            // Evitar exponer stacktrace al usuario; redirigir con flag de error
             return "redirect:/ADMIN/usuarios?error=exception";
         }
     }
 
     @GetMapping("/doctores")
     public String gestionDoctores(HttpSession session, Model model) {
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
-            return "redirect:/login";
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+        if (u == null || !u.getRol().getNombre().equals(ROLE_ADMIN)) {
+            return REDIRECT_LOGIN;
         }
 
         model.addAttribute("doctor", new Doctor());
-        model.addAttribute("doctores", doctorService.getAllDoctores());
-        model.addAttribute("usuarioLogueado", u);
-        return "ADMIN/gestionDoctores";
+        model.addAttribute(DOCTORES, doctorService.getAllDoctores());
+        model.addAttribute(USUARIO_LOGUEADO, u);
+        return GESTION_DOCTORES;
     }
 
     @PostMapping("/doctores/agregar")
@@ -120,14 +124,14 @@ public class AdminController {
                               Model model,
                               @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) {
 
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
-            return "redirect:/login";
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+        if (u == null || !u.getRol().getNombre().equals(ROLE_ADMIN)) {
+            return REDIRECT_LOGIN;
         }
 
         if (result.hasErrors()) {
-            model.addAttribute("doctores", doctorService.getAllDoctores());
-            return "ADMIN/gestionDoctores";
+            model.addAttribute(DOCTORES, doctorService.getAllDoctores());
+            return GESTION_DOCTORES;
         }
 
         try {
@@ -138,17 +142,17 @@ public class AdminController {
             }
             return "redirect:/ADMIN/doctores?success=created";
         } catch (RuntimeException e) {
-            model.addAttribute("doctores", doctorService.getAllDoctores());
+            model.addAttribute(DOCTORES, doctorService.getAllDoctores());
             model.addAttribute("error", e.getMessage());
-            return "ADMIN/gestionDoctores";
+            return GESTION_DOCTORES;
         }
     }
 
     @PostMapping("/doctores/eliminar/{id}")
     public String eliminarDoctor(@PathVariable Long id, HttpSession session) {
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
-            return "redirect:/login";
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+        if (u == null || !u.getRol().getNombre().equals(ROLE_ADMIN)) {
+            return REDIRECT_LOGIN;
         }
 
         try {
@@ -159,12 +163,11 @@ public class AdminController {
         }
     }
 
-    // ✅ Confirmar Cita asignando un doctor
     @PostMapping("/citas/confirmar/{id}")
     public String confirmarCita(@PathVariable Long id, @RequestParam Long doctorId, HttpSession session) {
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
-            return "redirect:/login";
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+        if (u == null || !u.getRol().getNombre().equals(ROLE_ADMIN)) {
+            return REDIRECT_LOGIN;
         }
 
         Cita cita = citaService.obtenerPorId(id);
@@ -182,12 +185,11 @@ public class AdminController {
         return "redirect:/ADMIN/dashboard?error=appointment_confirmation_failed";
     }
 
-    // ✅ Cancelar Cita
     @PostMapping("/citas/cancelar/{id}")
     public String cancelarCita(@PathVariable Long id, HttpSession session) {
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
-            return "redirect:/login";
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+        if (u == null || !u.getRol().getNombre().equals(ROLE_ADMIN)) {
+            return REDIRECT_LOGIN;
         }
 
         Cita cita = citaService.obtenerPorId(id);
@@ -200,16 +202,15 @@ public class AdminController {
         return "redirect:/ADMIN/dashboard?error=appointment_cancelation_failed";
     }
 
-    // ✅ Registrar Examen Clínico para un Usuario
     @PostMapping("/usuarios/examenes/agregar")
     public String agregarExamen(@RequestParam Long usuarioId,
                                  @RequestParam String tipo,
                                  @RequestParam String descripcion,
                                  @RequestParam String fecha,
                                  HttpSession session) {
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        if (u == null || !u.getRol().getNombre().equals("ROLE_ADMIN")) {
-            return "redirect:/login";
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+        if (u == null || !u.getRol().getNombre().equals(ROLE_ADMIN)) {
+            return REDIRECT_LOGIN;
         }
 
         Usuario paciente = usuarioService.getAll().stream()
