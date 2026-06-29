@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DataLoader implements CommandLineRunner {
 
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
+    private static final String ADMIN_EMAIL = "admin@admin.com";
 
     @Autowired
     RolRepository rolRepo;
@@ -35,17 +36,17 @@ public class DataLoader implements CommandLineRunner {
             rolRepo.save(r);
         }
 
-        if (usuarioRepo.findByEmail("admin@admin.com") == null) {
+        if (usuarioRepo.findByEmail(ADMIN_EMAIL) == null) {
             Usuario admin = new Usuario();
             admin.setNombre("Administrador");
             admin.setDni("00000000");
             admin.setTelefono("999999999");
-            admin.setEmail("admin@admin.com");
+            admin.setEmail(ADMIN_EMAIL);
             admin.setPassword(BCrypt.hashpw("admin123", BCrypt.gensalt()));
             admin.setRol(rolRepo.findByNombre(ROLE_ADMIN));
             usuarioRepo.save(admin);
         } else {
-            Usuario existing = usuarioRepo.findByEmail("admin@admin.com");
+            Usuario existing = usuarioRepo.findByEmail(ADMIN_EMAIL);
             if (existing != null && (existing.getRol() == null || !ROLE_ADMIN.equals(existing.getRol().getNombre()))) {
                 existing.setRol(rolRepo.findByNombre(ROLE_ADMIN));
                 usuarioRepo.save(existing);
