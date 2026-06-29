@@ -4,7 +4,6 @@ import com.proyecto.medilink.model.Rol;
 import com.proyecto.medilink.model.Usuario;
 import com.proyecto.medilink.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 
@@ -19,8 +18,11 @@ public class UsuarioService {
         this.rolService = rolService;
     }
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Usuario registrarUsuario(Usuario usuario) {
-        usuario.setPassword(BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt()));
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         // Si se registra el email admin@admin.com, asignar rol ADMIN automáticamente
         if ("admin@admin.com".equalsIgnoreCase(usuario.getEmail())) {
             usuario.setRol(rolService.findByNombre("ROLE_ADMIN"));
@@ -41,7 +43,7 @@ public class UsuarioService {
 
     public boolean validarCredenciales(String email, String pass) {
         Usuario u = usuarioRepository.findByEmail(email);
-        return u != null && BCrypt.checkpw(pass, u.getPassword());
+        return u != null && passwordEncoder.matches(pass, u.getPassword());
     }
 
     public void cambiarRol(Long usuarioId, String nuevoRol) {
