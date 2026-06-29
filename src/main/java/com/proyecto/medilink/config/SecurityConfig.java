@@ -46,12 +46,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-<<<<<<< HEAD
             // CSRF habilitado: Thymeleaf inyecta el token automáticamente en th:action
             // Los formularios HTML planos con action="" deben incluir el token manualmente (ver serviciosUser.html)
-=======
-            .csrf(Customizer.withDefaults())
->>>>>>> b900a0f19eac12a3d10d58492817e2e374b63ea1
+
             .authenticationProvider(authenticationProvider())
 
             .authorizeHttpRequests(auth -> auth

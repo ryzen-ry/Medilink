@@ -249,13 +249,8 @@
                     <label class="fw-bold mb-2">Precio de la Consulta:</label>
                     <input class="form-control mb-3" id="precio" value="35.00" readonly>
 
-<<<<<<< HEAD
                     <form id="formServicio" th:action="@{/USER/guardarServicioYRedirigir}" method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-=======
-                    <form id="formServicio" action="/USER/guardarServicioYRedirigir" method="post">
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
->>>>>>> b900a0f19eac12a3d10d58492817e2e374b63ea1
                         <input type="hidden" name="nombre" id="nombreServicio">
                         <input type="hidden" name="precio" id="precioServicio">
                         <button type="submit" class="btn btn-primary w-100 py-2">
@@ -279,13 +274,8 @@
 
             <div class="modal-body text-center p-4">
                 <p class="text-muted small mb-4">Adquiere un plan y mantén tu salud controlada las 24 horas del día.</p>
-<<<<<<< HEAD
                 <form th:action="@{/USER/guardarServicio}" method="post">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-=======
-                <form action="/USER/guardarServicio" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
->>>>>>> b900a0f19eac12a3d10d58492817e2e374b63ea1
                     <input type="hidden" name="nombre" value="Monitoreo Crónico">
 
                     <button class="btn btn-outline-success w-100 mb-3 py-2 fw-semibold" name="precio" value="49">

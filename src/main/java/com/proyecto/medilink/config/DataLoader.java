@@ -16,11 +16,18 @@ public class DataLoader implements CommandLineRunner {
     private static final String ROLE_USER = "ROLE_USER";
     private static final String ADMIN_EMAIL = "admin@admin.com";
 
-    @Autowired
-    private RolRepository rolRepo;
+    private final RolRepository rolRepo;
+    private final UsuarioRepository usuarioRepo;
+    private final PasswordEncoder passwordEncoder;
+
+    public DataLoader(RolRepository rolRepo, UsuarioRepository usuarioRepo, PasswordEncoder passwordEncoder) {
+        this.rolRepo = rolRepo;
+        this.usuarioRepo = usuarioRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Autowired
-    private UsuarioRepository usuarioRepo;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

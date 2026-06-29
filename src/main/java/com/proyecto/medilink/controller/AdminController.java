@@ -13,7 +13,6 @@ import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,17 +28,20 @@ public class AdminController {
     private static final String DOCTORES = "doctores";
     private static final String GESTION_DOCTORES = "ADMIN/gestionDoctores";
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+    private final DoctorService doctorService;
+    private final CitaService citaService;
+    private final ExamenService examenService;
 
-    @Autowired
-    private DoctorService doctorService;
-
-    @Autowired
-    private CitaService citaService;
-
-    @Autowired
-    private ExamenService examenService;
+    public AdminController(UsuarioService usuarioService,
+                           DoctorService doctorService,
+                           CitaService citaService,
+                           ExamenService examenService) {
+        this.usuarioService = usuarioService;
+        this.doctorService = doctorService;
+        this.citaService = citaService;
+        this.examenService = examenService;
+    }
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {

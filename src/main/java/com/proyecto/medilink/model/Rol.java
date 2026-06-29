@@ -3,11 +3,9 @@ package com.proyecto.medilink.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import java.util.List;
 
 @Entity
-@Data
 @Table(name = "roles")
 public class Rol {
 
@@ -22,4 +20,32 @@ public class Rol {
 
     @OneToMany(mappedBy = "rol")
     private List<Usuario> usuarios;
+
+    // Constructor vacío
+    public Rol() {}
+
+    // Getters y Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(List<Usuario> usuarios) {
+        this.usuarios = usuarios;
+    }
 }
