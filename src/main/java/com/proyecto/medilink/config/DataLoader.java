@@ -7,6 +7,8 @@ import com.proyecto.medilink.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -23,6 +25,9 @@ public class DataLoader implements CommandLineRunner {
         this.usuarioRepo = usuarioRepo;
         this.passwordEncoder = passwordEncoder;
     }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

@@ -3,6 +3,7 @@ package com.proyecto.medilink.service;
 import com.proyecto.medilink.model.Rol;
 import com.proyecto.medilink.model.Usuario;
 import com.proyecto.medilink.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,9 @@ public class UsuarioService {
         this.rolService = rolService;
         this.passwordEncoder = passwordEncoder;
     }
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
