@@ -19,24 +19,20 @@ public class RedirectController {
 
     @GetMapping("/redireccion")
     public String redireccion(HttpSession session) {
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String email = auth.getName();
-
         Usuario u = usuarioService.findByEmail(email);
 
-        // Guardas el usuario en sesión (como lo hacías antes)
-        session.setAttribute("usuarioLogueado", u);
+        // Guardar solo el ID en sesión (evita el error de serialización)
+        session.setAttribute("usuarioId", u.getId());
 
         // Redirección por rol
-        String rol = u.getRol().getNombre(); // "ROLE_ADMIN" / "ROLE_USER"
-
+        String rol = u.getRol().getNombre();
         if (rol.equals("ROLE_ADMIN")) {
             return "redirect:/ADMIN/dashboard";
         } else if (rol.equals("ROLE_USER")) {
             return "redirect:/USER/indexUser";
         }
-
         return "redirect:/";
     }
 }
