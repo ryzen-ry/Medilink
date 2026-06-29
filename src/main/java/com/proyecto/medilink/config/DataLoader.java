@@ -18,6 +18,7 @@ public class DataLoader implements CommandLineRunner {
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
     private static final String ROLE_USER = "ROLE_USER";
     private static final String ADMIN_EMAIL = "admin@admin.com";
+    private static final String DEFAULT_PASSWORD = "admin123"; // Solo para desarrollo
 
     private final RolRepository rolRepo;
     private final UsuarioRepository usuarioRepo;
@@ -57,7 +58,7 @@ public class DataLoader implements CommandLineRunner {
             
             // ⚠️ Si no existe variable de entorno, USAR SOLO PARA DESARROLLO
             if (adminPassword == null || adminPassword.isEmpty()) {
-                adminPassword = "admin123"; // Solo para desarrollo local
+                adminPassword = DEFAULT_PASSWORD; // Solo para desarrollo local
                 logger.warn("⚠️  ADVERTENCIA: Usando contraseña por defecto. Setea ADMIN_PASSWORD en producción.");
             }
             
