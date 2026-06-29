@@ -46,7 +46,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // si quieres CSRF habilitado, habría que adaptar formulario
+            // CSRF habilitado: Thymeleaf inyecta el token automáticamente en th:action
+            // Los formularios HTML planos con action="" deben incluir el token manualmente (ver serviciosUser.html)
             .authenticationProvider(authenticationProvider())
 
             .authorizeHttpRequests(auth -> auth
