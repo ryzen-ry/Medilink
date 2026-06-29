@@ -6,7 +6,6 @@ import com.proyecto.medilink.model.Usuario;
 import com.proyecto.medilink.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,8 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class AuthController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+
+    // ✅ Constructor injection (en lugar de @Autowired en campos)
+    public AuthController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @GetMapping("/login")
     public String login(Model model) {

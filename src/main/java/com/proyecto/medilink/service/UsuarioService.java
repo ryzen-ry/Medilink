@@ -3,7 +3,7 @@ package com.proyecto.medilink.service;
 import com.proyecto.medilink.model.Rol;
 import com.proyecto.medilink.model.Usuario;
 import com.proyecto.medilink.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -12,11 +12,14 @@ import java.util.List;
 @Service
 public class UsuarioService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final RolService rolService;
 
-    @Autowired
-    private RolService rolService;
+    public UsuarioService(UsuarioRepository usuarioRepository, RolService rolService) {
+        this.usuarioRepository = usuarioRepository;
+        this.rolService = rolService;
+    }
+    
 
     public Usuario registrarUsuario(Usuario usuario) {
         usuario.setPassword(BCrypt.hashpw(usuario.getPassword(), BCrypt.gensalt()));

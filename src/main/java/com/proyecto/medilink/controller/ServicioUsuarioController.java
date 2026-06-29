@@ -3,7 +3,6 @@ package com.proyecto.medilink.controller;
 import com.proyecto.medilink.model.*;
 import com.proyecto.medilink.service.*;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +14,18 @@ public class ServicioUsuarioController {
     private static final String USUARIO_LOGUEADO = "usuarioLogueado";
     private static final String REDIRECT_LOGIN = "redirect:/login";
 
-    @Autowired
-    private ServicioElegidoService serviciosService;
+    private final ServicioElegidoService serviciosService;
+    private final CitaService citaService;
+    private final ExamenService examenService;
 
-    @Autowired
-    private CitaService citaService;
-
-    @Autowired
-    private ExamenService examenService;
+    // ✅ Constructor injection (en lugar de @Autowired en campos)
+    public ServicioUsuarioController(ServicioElegidoService serviciosService,
+                                     CitaService citaService,
+                                     ExamenService examenService) {
+        this.serviciosService = serviciosService;
+        this.citaService = citaService;
+        this.examenService = examenService;
+    }
 
     // ------------------------------------------------------------
     // VISTA PRINCIPAL (Tarjetas: Servicios - Citas - Historial modal)
