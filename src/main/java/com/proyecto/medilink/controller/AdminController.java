@@ -1,5 +1,6 @@
 package com.proyecto.medilink.controller;
 
+import com.proyecto.medilink.dto.DoctorDTO;
 import com.proyecto.medilink.model.Doctor;
 import com.proyecto.medilink.model.Usuario;
 import com.proyecto.medilink.model.Cita;
@@ -111,14 +112,14 @@ public class AdminController {
             return REDIRECT_LOGIN;
         }
 
-        model.addAttribute("doctor", new Doctor());
+        model.addAttribute("doctor", new DoctorDTO());
         model.addAttribute(DOCTORES, doctorService.getAllDoctores());
         model.addAttribute(USUARIO_LOGUEADO, u);
         return GESTION_DOCTORES;
     }
 
     @PostMapping("/doctores/agregar")
-    public String agregarDoctor(@Valid @ModelAttribute("doctor") Doctor doctor,
+    public String agregarDoctor(@Valid @ModelAttribute("doctor") DoctorDTO doctorDTO,
                               BindingResult result,
                               HttpSession session,
                               Model model,
@@ -135,6 +136,16 @@ public class AdminController {
         }
 
         try {
+            Doctor doctor = new Doctor();
+            doctor.setId(doctorDTO.getId());
+            doctor.setNombre(doctorDTO.getNombre());
+            doctor.setApellidos(doctorDTO.getApellidos());
+            doctor.setEspecialidad(doctorDTO.getEspecialidad());
+            doctor.setNumeroColegiatura(doctorDTO.getNumeroColegiatura());
+            doctor.setEmail(doctorDTO.getEmail());
+            doctor.setTelefono(doctorDTO.getTelefono());
+            doctor.setImagen(doctorDTO.getImagen());
+
             if (imageFile != null && !imageFile.isEmpty()) {
                 doctorService.guardarDoctor(doctor, imageFile);
             } else {
