@@ -19,14 +19,7 @@
 		<java.version>17</java.version>
 		<jacoco.version>0.8.12</jacoco.version>
 		<sonar.organization>ryzen-ry</sonar.organization>
-		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-		<sonar.projectKey>Medilink</sonar.projectKey>
-		<sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-
-		<!-- ✅ CODIFICACIÓN UTF-8 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
 	</properties>
 
 	<dependencies>
@@ -114,8 +107,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-
-			<!-- Jacoco fijo (siempre se ejecuta) -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
