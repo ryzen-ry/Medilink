@@ -127,6 +127,7 @@
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <form method="post" action="#">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                         <div class="mb-3"><input name="name" placeholder="Nombre" class="form-control" /></div>
                         <div class="mb-3"><input name="email" placeholder="Email" class="form-control" /></div>
                         <div class="mb-3"><textarea name="message" placeholder="Mensaje" class="form-control" rows="4"></textarea></div>

@@ -5,8 +5,8 @@ import com.proyecto.medilink.model.Usuario;
 import com.proyecto.medilink.repository.RolRepository;
 import com.proyecto.medilink.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
@@ -21,6 +21,9 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired
     private UsuarioRepository usuarioRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
@@ -46,16 +49,13 @@ public class DataLoader implements CommandLineRunner {
             admin.setTelefono("999999999");
             admin.setEmail(ADMIN_EMAIL);
             
-            // 🔒 La contraseña se lee desde variable de entorno
             String adminPassword = System.getenv("ADMIN_PASSWORD");
-            
-            // Si no existe variable de entorno, usar valor por defecto SOLO para desarrollo
-            if (adminPassword == null || adminPassword.isEmpty()) {
-                adminPassword = "admin123"; // Solo para desarrollo local
-                System.out.println("⚠️  ADVERTENCIA: Usando contraseña por defecto. Setea ADMIN_PASSWORD en producción.");
+
+            if (adminPassword == null || adminPassword.isBlank()) {
+                throw new IllegalStateException("ADMIN_PASSWORD debe estar definido como variable de entorno para crear el usuario administrador.");
             }
-            
-            admin.setPassword(BCrypt.hashpw(adminPassword, BCrypt.gensalt()));
+
+            admin.setPassword(passwordEncoder.encode(adminPassword));
             admin.setRol(rolRepo.findByNombre(ROLE_ADMIN));
             usuarioRepo.save(admin);
             System.out.println("✅ Administrador creado con éxito.");
