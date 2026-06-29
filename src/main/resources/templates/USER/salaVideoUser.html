@@ -200,62 +200,60 @@
         crossorigin="anonymous">
 </script>
 
-<script>
-    (async function() {
-        const localVideo = document.getElementById("localVideo");
-        const btnMute = document.getElementById("btnMute");
-        const btnCamera = document.getElementById("btnCamera");
-        const micIcon = document.getElementById("mic-icon");
-        const videoIcon = document.getElementById("video-icon");
-        let localStream = null;
+<script type="module">
+    const localVideo = document.getElementById("localVideo");
+    const btnMute = document.getElementById("btnMute");
+    const btnCamera = document.getElementById("btnCamera");
+    const micIcon = document.getElementById("mic-icon");
+    const videoIcon = document.getElementById("video-icon");
+    let localStream = null;
 
-        // INICIAR CÁMARA LOCAL
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-            localVideo.srcObject = stream;
-            localStream = stream;
-            globalThis.localStream = stream;
-        } catch (err) {
-            console.error("Error al abrir cámara:", err);
-            alert("No se pudo tener acceso a tu cámara o micrófono. Asegúrate de otorgar los permisos necesarios.");
+    // INICIAR CÁMARA LOCAL
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localVideo.srcObject = stream;
+        localStream = stream;
+        globalThis.localStream = stream;
+    } catch (err) {
+        console.error("Error al abrir cámara:", err);
+        alert("No se pudo tener acceso a tu cámara o micrófono. Asegúrate de otorgar los permisos necesarios.");
+    }
+
+    // APAGAR / PRENDER MICRÓFONO
+    btnMute.onclick = () => {
+        if (!localStream) return;
+        const audioTrack = localStream.getAudioTracks()[0];
+        audioTrack.enabled = !audioTrack.enabled;
+        if (audioTrack.enabled) {
+            btnMute.classList.remove("active");
+            micIcon.className = "fa-solid fa-microphone";
+        } else {
+            btnMute.classList.add("active");
+            micIcon.className = "fa-solid fa-microphone-slash";
         }
+    };
 
-        // APAGAR / PRENDER MICRÓFONO
-        btnMute.onclick = () => {
-            if (!localStream) return;
-            const audioTrack = localStream.getAudioTracks()[0];
-            audioTrack.enabled = !audioTrack.enabled;
-            if (audioTrack.enabled) {
-                btnMute.classList.remove("active");
-                micIcon.className = "fa-solid fa-microphone";
-            } else {
-                btnMute.classList.add("active");
-                micIcon.className = "fa-solid fa-microphone-slash";
-            }
-        };
+    // APAGAR / PRENDER CÁMARA
+    btnCamera.onclick = () => {
+        if (!localStream) return;
+        const videoTrack = localStream.getVideoTracks()[0];
+        videoTrack.enabled = !videoTrack.enabled;
+        if (videoTrack.enabled) {
+            btnCamera.classList.remove("active");
+            videoIcon.className = "fa-solid fa-video";
+        } else {
+            btnCamera.classList.add("active");
+            videoIcon.className = "fa-solid fa-video-slash";
+        }
+    };
 
-        // APAGAR / PRENDER CÁMARA
-        btnCamera.onclick = () => {
-            if (!localStream) return;
-            const videoTrack = localStream.getVideoTracks()[0];
-            videoTrack.enabled = !videoTrack.enabled;
-            if (videoTrack.enabled) {
-                btnCamera.classList.remove("active");
-                videoIcon.className = "fa-solid fa-video";
-            } else {
-                btnCamera.classList.add("active");
-                videoIcon.className = "fa-solid fa-video-slash";
-            }
-        };
-
-        // COLGAR LLAMADA
-        document.getElementById("btnEnd").onclick = () => {
-            if (localStream) {
-                localStream.getTracks().forEach(t => t.stop());
-            }
-            globalThis.location.href = "/USER/serviciosUser";
-        };
-    })();
+    // COLGAR LLAMADA
+    document.getElementById("btnEnd").onclick = () => {
+        if (localStream) {
+            localStream.getTracks().forEach(t => t.stop());
+        }
+        globalThis.location.href = "/USER/serviciosUser";
+    };
 </script>
 
 </body>
