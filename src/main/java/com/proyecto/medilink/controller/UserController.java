@@ -1,7 +1,6 @@
 package com.proyecto.medilink.controller;
 
 import com.proyecto.medilink.service.DoctorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/USER")
 public class UserController {
 
-    @Autowired
-    private DoctorService doctorService;
+    private final DoctorService doctorService;
+
+    // ✅ Constructor injection (en lugar de @Autowired en campos)
+    public UserController(DoctorService doctorService) {
+        this.doctorService = doctorService;
+    }
 
     @GetMapping("/indexUser")
     public String indexUser() {

@@ -24,7 +24,7 @@ public class DoctorDTO {
     @NotBlank(message = "El email es obligatorio")
     private String email;
 
-    @Pattern(regexp = "^[0-9]{9}$", message = "El teléfono debe tener 9 dígitos")
+    @Pattern(regexp = "^\\d{9}$", message = "El teléfono debe tener 9 dígitos")
     private String telefono;
 
     private String imagen;
