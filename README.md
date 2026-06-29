@@ -1,5 +1,12 @@
 # Medilink
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ryzen-ry_Medilink&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ryzen-ry_Medilink)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ryzen-ry_Medilink&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ryzen-ry_Medilink)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ryzen-ry_Medilink&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ryzen-ry_Medilink)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=ryzen-ry_Medilink&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=ryzen-ry_Medilink)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=ryzen-ry_Medilink&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=ryzen-ry_Medilink)
+[![Duplication](https://sonarcloud.io/api/project_badges/measure?project=ryzen-ry_Medilink&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=ryzen-ry_Medilink)
+
 titulo: Sistema Web de Gestión de Citas Médicas y Teleconsultas "MEDILINK"
 
 integrantes: -antiquera farfan ronaldi isacc u22208906 -Campos Toribia Liliana lilibeth
