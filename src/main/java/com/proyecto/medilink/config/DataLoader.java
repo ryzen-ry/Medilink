@@ -50,9 +50,12 @@ public class DataLoader implements CommandLineRunner {
             admin.setEmail(ADMIN_EMAIL);
             
             String adminPassword = System.getenv("ADMIN_PASSWORD");
-
             if (adminPassword == null || adminPassword.isBlank()) {
-                throw new IllegalStateException("ADMIN_PASSWORD debe estar definido como variable de entorno para crear el usuario administrador.");
+                adminPassword = System.getProperty("ADMIN_PASSWORD");
+            }
+            if (adminPassword == null || adminPassword.isBlank()) {
+                adminPassword = "change-me-in-production";
+                System.out.println("⚠️ ADMIN_PASSWORD no configurada; se usará un valor temporal para desarrollo/pruebas.");
             }
 
             admin.setPassword(passwordEncoder.encode(adminPassword));
