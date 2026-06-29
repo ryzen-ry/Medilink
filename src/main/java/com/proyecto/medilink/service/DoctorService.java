@@ -23,36 +23,32 @@ public class DoctorService {
     }
 
     public Doctor guardarDoctor(Doctor doctor) {
-        // Mantener compatibilidad: sin imagen
         if (doctorRepository.findByEmail(doctor.getEmail()) != null) {
-            throw new RuntimeException("El email ya está registrado");
+            throw new IllegalArgumentException("El email ya está registrado");
         }
         return doctorRepository.save(doctor);
     }
 
     public Doctor guardarDoctor(Doctor doctor, MultipartFile imageFile) {
         if (doctorRepository.findByEmail(doctor.getEmail()) != null) {
-            throw new RuntimeException("El email ya está registrado");
+            throw new IllegalArgumentException("El email ya está registrado");
         }
 
-        // Guardar la imagen si fue enviada
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 Path imagesDir = Paths.get("src/main/resources/static/img/doctors");
                 if (!Files.exists(imagesDir)) {
                     Files.createDirectories(imagesDir);
                 }
-
                 String original = imageFile.getOriginalFilename();
                 String filename = System.currentTimeMillis() + "_" + (original != null ? original.replaceAll("\\s+", "_") : "img.jpg");
                 Path target = imagesDir.resolve(filename);
                 Files.copy(imageFile.getInputStream(), target);
                 doctor.setImagen(filename);
             } catch (IOException e) {
-                throw new RuntimeException("Error al guardar la imagen del doctor", e);
+                throw new IllegalStateException("Error al guardar la imagen del doctor", e);
             }
         }
-
         return doctorRepository.save(doctor);
     }
 
