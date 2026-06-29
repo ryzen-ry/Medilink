@@ -23,8 +23,8 @@ public class RedirectController {
         String email = auth.getName();
         Usuario u = usuarioService.findByEmail(email);
 
-        // Guardar solo el ID en sesión (evita el error de serialización)
-        session.setAttribute("usuarioId", u.getId());
+        // ✅ Guardar el usuario COMPLETO en sesión
+        session.setAttribute("usuarioLogueado", u);
 
         // Redirección por rol
         String rol = u.getRol().getNombre();
