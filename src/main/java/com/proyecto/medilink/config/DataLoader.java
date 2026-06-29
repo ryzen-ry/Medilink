@@ -7,8 +7,6 @@ import com.proyecto.medilink.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.mindrot.jbcrypt.BCrypt;
-
 @Component
 public class DataLoader implements CommandLineRunner {
 
@@ -18,10 +16,12 @@ public class DataLoader implements CommandLineRunner {
 
     private final RolRepository rolRepo;
     private final UsuarioRepository usuarioRepo;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataLoader(RolRepository rolRepo, UsuarioRepository usuarioRepo) {
+    public DataLoader(RolRepository rolRepo, UsuarioRepository usuarioRepo, PasswordEncoder passwordEncoder) {
         this.rolRepo = rolRepo;
         this.usuarioRepo = usuarioRepo;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Autowired

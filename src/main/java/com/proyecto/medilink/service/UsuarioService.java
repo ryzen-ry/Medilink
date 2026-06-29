@@ -3,6 +3,7 @@ package com.proyecto.medilink.service;
 import com.proyecto.medilink.model.Rol;
 import com.proyecto.medilink.model.Usuario;
 import com.proyecto.medilink.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +13,12 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final RolService rolService;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository, RolService rolService) {
+    public UsuarioService(UsuarioRepository usuarioRepository, RolService rolService, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.rolService = rolService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Autowired
