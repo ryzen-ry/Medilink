@@ -1,6 +1,6 @@
 package com.proyecto.medilink.controller;
 
-import com.proyecto.medilink.model.Usuario;
+import com.proyecto.medilink.dto.UsuarioDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +36,7 @@ public class MainController {
 
     @GetMapping("/registro")
     public String registro(Model model) {
-        model.addAttribute("usuario", new Usuario());
+        model.addAttribute("usuario", new UsuarioDTO());
         return "registro";
     }
 }
