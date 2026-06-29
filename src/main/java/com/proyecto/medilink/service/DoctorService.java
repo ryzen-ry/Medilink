@@ -2,7 +2,6 @@ package com.proyecto.medilink.service;
 
 import com.proyecto.medilink.model.Doctor;
 import com.proyecto.medilink.repository.DoctorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,8 +14,11 @@ import java.util.List;
 @Service
 public class DoctorService {
 
-    @Autowired
-    private DoctorRepository doctorRepository;
+    private final DoctorRepository doctorRepository;
+
+    public DoctorService(DoctorRepository doctorRepository) {
+        this.doctorRepository = doctorRepository;
+    }
 
     public List<Doctor> getAllDoctores() {
         return doctorRepository.findAll();
