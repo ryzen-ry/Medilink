@@ -7,7 +7,7 @@ import com.proyecto.medilink.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mindrot.jbcrypt.BCrypt;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -16,11 +16,13 @@ public class DataLoader implements CommandLineRunner {
     private static final String ROLE_USER = "ROLE_USER";
     private static final String ADMIN_EMAIL = "admin@admin.com";
 
-    @Autowired
-    private RolRepository rolRepo;
+    private final RolRepository rolRepo;
+    private final UsuarioRepository usuarioRepo;
 
-    @Autowired
-    private UsuarioRepository usuarioRepo;
+    public DataLoader(RolRepository rolRepo, UsuarioRepository usuarioRepo) {
+        this.rolRepo = rolRepo;
+        this.usuarioRepo = usuarioRepo;
+    }
 
     @Autowired
     private PasswordEncoder passwordEncoder;

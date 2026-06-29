@@ -1,11 +1,11 @@
 package com.proyecto.medilink.controller;
 
 import com.proyecto.medilink.dto.LoginDTO;
+import com.proyecto.medilink.dto.UsuarioDTO;
 import com.proyecto.medilink.model.Usuario;
 import com.proyecto.medilink.service.UsuarioService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class AuthController {
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+
+    public AuthController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
+    }
 
     @GetMapping("/login")
     public String login(Model model) {
@@ -25,15 +28,22 @@ public class AuthController {
 
     
     @PostMapping("/registro")
-    public String procesarRegistro(@Valid @ModelAttribute("usuario") Usuario usuario,
+    public String procesarRegistro(@Valid @ModelAttribute("usuario") UsuarioDTO usuarioDTO,
                                    BindingResult result) {
 
         if (result.hasErrors()) return "registro";
 
-        if (usuarioService.findByEmail(usuario.getEmail()) != null) {
+        if (usuarioService.findByEmail(usuarioDTO.getEmail()) != null) {
             result.rejectValue("email", "error.usuario", "El correo ya existe");
             return "registro";
         }
+
+        Usuario usuario = new Usuario();
+        usuario.setNombre(usuarioDTO.getNombre());
+        usuario.setDni(usuarioDTO.getDni());
+        usuario.setTelefono(usuarioDTO.getTelefono());
+        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setPassword(usuarioDTO.getPassword());
 
         usuarioService.registrarUsuario(usuario);
         return "redirect:/login?success";

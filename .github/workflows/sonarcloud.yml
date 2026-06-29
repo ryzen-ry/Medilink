@@ -44,7 +44,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # ✅ NUEVO: Cache para SonarQube (acelera el análisis)
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
@@ -73,7 +72,6 @@ jobs:
             exit 1
           fi
 
-      # ✅ MODIFICADO: Usa el comando Maven directamente (como sugiere SonarCloud)
       - name: SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -84,7 +82,7 @@ jobs:
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.java.binaries=target/classes \
             -Dsonar.java.test.binaries=target/test-classes \
-            -Dsonar.sources=src/main/java \
+            -Dsonar.sources=src/main/java,src/main/resources \
             -Dsonar.tests=src/test/java \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
             -Dsonar.junit.reportPaths=target/surefire-reports

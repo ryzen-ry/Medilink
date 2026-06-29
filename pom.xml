@@ -20,6 +20,7 @@
 		<jacoco.version>0.8.12</jacoco.version>
 		<sonar.organization>ryzen-ry</sonar.organization>
 		<sonar.projectKey>ryzen-ry_Medilink</sonar.projectKey>
+		<sonar.sources>src/main/java,src/main/resources</sonar.sources>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 

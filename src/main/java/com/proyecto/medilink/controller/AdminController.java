@@ -1,5 +1,6 @@
 package com.proyecto.medilink.controller;
 
+import com.proyecto.medilink.dto.DoctorDTO;
 import com.proyecto.medilink.model.Doctor;
 import com.proyecto.medilink.model.Usuario;
 import com.proyecto.medilink.model.Cita;
@@ -12,7 +13,6 @@ import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,17 +28,20 @@ public class AdminController {
     private static final String DOCTORES = "doctores";
     private static final String GESTION_DOCTORES = "ADMIN/gestionDoctores";
 
-    @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
+    private final DoctorService doctorService;
+    private final CitaService citaService;
+    private final ExamenService examenService;
 
-    @Autowired
-    private DoctorService doctorService;
-
-    @Autowired
-    private CitaService citaService;
-
-    @Autowired
-    private ExamenService examenService;
+    public AdminController(UsuarioService usuarioService,
+                           DoctorService doctorService,
+                           CitaService citaService,
+                           ExamenService examenService) {
+        this.usuarioService = usuarioService;
+        this.doctorService = doctorService;
+        this.citaService = citaService;
+        this.examenService = examenService;
+    }
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
@@ -111,14 +114,14 @@ public class AdminController {
             return REDIRECT_LOGIN;
         }
 
-        model.addAttribute("doctor", new Doctor());
+        model.addAttribute("doctor", new DoctorDTO());
         model.addAttribute(DOCTORES, doctorService.getAllDoctores());
         model.addAttribute(USUARIO_LOGUEADO, u);
         return GESTION_DOCTORES;
     }
 
     @PostMapping("/doctores/agregar")
-    public String agregarDoctor(@Valid @ModelAttribute("doctor") Doctor doctor,
+    public String agregarDoctor(@Valid @ModelAttribute("doctor") DoctorDTO doctorDTO,
                               BindingResult result,
                               HttpSession session,
                               Model model,
@@ -135,6 +138,16 @@ public class AdminController {
         }
 
         try {
+            Doctor doctor = new Doctor();
+            doctor.setId(doctorDTO.getId());
+            doctor.setNombre(doctorDTO.getNombre());
+            doctor.setApellidos(doctorDTO.getApellidos());
+            doctor.setEspecialidad(doctorDTO.getEspecialidad());
+            doctor.setNumeroColegiatura(doctorDTO.getNumeroColegiatura());
+            doctor.setEmail(doctorDTO.getEmail());
+            doctor.setTelefono(doctorDTO.getTelefono());
+            doctor.setImagen(doctorDTO.getImagen());
+
             if (imageFile != null && !imageFile.isEmpty()) {
                 doctorService.guardarDoctor(doctor, imageFile);
             } else {
