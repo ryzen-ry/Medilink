@@ -52,24 +52,29 @@ jobs:
           SPRING_DATASOURCE_USERNAME: root
           SPRING_DATASOURCE_PASSWORD: 12345678
 
-      - name: Verify Jacoco report exists
+      - name: Debug Jacoco report
         run: |
-          echo "=== Archivos en target/site/jacoco/ ==="
-          ls -la target/site/jacoco/ || echo "❌ El directorio no existe"
-          echo "=== Primeras líneas del XML ==="
-          cat target/site/jacoco/jacoco.xml | head -20 || echo "❌ El archivo XML no existe"
+          echo "=== Checking Jacoco report ==="
+          if [ -f target/site/jacoco/jacoco.xml ]; then
+            echo "✅ Jacoco XML found!"
+            echo "File size: $(wc -c < target/site/jacoco/jacoco.xml) bytes"
+            echo "First 10 lines:"
+            head -10 target/site/jacoco/jacoco.xml
+          else
+            echo "❌ Jacoco XML NOT found!"
+            ls -la target/site/ || echo "No site directory"
+            exit 1
+          fi
 
-      # ============================================================
-      # ✅ SONARCLOUD CON RUTA RELATIVA (CAMBIO CLAVE)
-      # ============================================================
       - name: SonarCloud analysis
         uses: SonarSource/sonarcloud-github-action@v2.2.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=medilinkSoluciones
+            -Dsonar.projectKey=Medilink
             -Dsonar.organization=ryzen-ry
+            -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.java.binaries=target/classes
             -Dsonar.java.test.binaries=target/test-classes
             -Dsonar.sources=src/main/java
@@ -80,6 +85,7 @@ jobs:
 
       - name: Upload Jacoco report
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: jacoco-report
           path: target/site/jacoco/
