@@ -3,7 +3,6 @@
 # Feel free to take a look at our documentation (https://docs.sonarcloud.io/getting-started/github/)
 # or reach out to our community forum if you need some help (https://community.sonarsource.com/c/help/sc/9)
 
-
 name: SonarCloud Analysis
 
 on:
@@ -45,6 +44,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      # ✅ NUEVO: Cache para SonarQube (acelera el análisis)
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
       - name: Build with Maven
         run: mvn -B clean verify
         env:
@@ -52,34 +59,39 @@ jobs:
           SPRING_DATASOURCE_USERNAME: root
           SPRING_DATASOURCE_PASSWORD: 12345678
 
-      - name: Verify Jacoco report exists
+      - name: Debug Jacoco report
         run: |
-          echo "=== Archivos en target/site/jacoco/ ==="
-          ls -la target/site/jacoco/ || echo "❌ El directorio no existe"
-          echo "=== Primeras líneas del XML ==="
-          cat target/site/jacoco/jacoco.xml | head -20 || echo "❌ El archivo XML no existe"
+          echo "=== Checking Jacoco report ==="
+          if [ -f target/site/jacoco/jacoco.xml ]; then
+            echo "✅ Jacoco XML found!"
+            echo "File size: $(wc -c < target/site/jacoco/jacoco.xml) bytes"
+            echo "First 10 lines:"
+            head -10 target/site/jacoco/jacoco.xml
+          else
+            echo "❌ Jacoco XML NOT found!"
+            ls -la target/site/ || echo "No site directory"
+            exit 1
+          fi
 
-      # ============================================================
-      # ✅ SONARCLOUD CON RUTA RELATIVA (CAMBIO CLAVE)
-      # ============================================================
+      # ✅ MODIFICADO: Usa el comando Maven directamente (como sugiere SonarCloud)
       - name: SonarCloud analysis
-        uses: SonarSource/sonarcloud-github-action@v2.2.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=medilinkSoluciones
-            -Dsonar.organization=ryzen-ry
-            -Dsonar.java.binaries=target/classes
-            -Dsonar.java.test.binaries=target/test-classes
-            -Dsonar.sources=src/main/java
-            -Dsonar.tests=src/test/java
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+        run: |
+          mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=Medilink \
+            -Dsonar.organization=ryzen-ry \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.java.binaries=target/classes \
+            -Dsonar.java.test.binaries=target/test-classes \
+            -Dsonar.sources=src/main/java \
+            -Dsonar.tests=src/test/java \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
             -Dsonar.junit.reportPaths=target/surefire-reports
-            -Dsonar.verbose=true
 
       - name: Upload Jacoco report
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: jacoco-report
           path: target/site/jacoco/
