@@ -79,7 +79,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=ryzen-ry_Medilink \
+            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }} \
             -Dsonar.organization=ryzen-ry \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.java.binaries=target/classes \
