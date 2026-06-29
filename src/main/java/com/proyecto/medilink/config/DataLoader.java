@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Component
 public class DataLoader implements CommandLineRunner {
 
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
+
     @Autowired
     RolRepository rolRepo;
 
@@ -21,9 +23,9 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        if (rolRepo.findByNombre("ROLE_ADMIN") == null) {
+        if (rolRepo.findByNombre(ROLE_ADMIN) == null) {
             Rol r = new Rol();
-            r.setNombre("ROLE_ADMIN");
+            r.setNombre(ROLE_ADMIN);
             rolRepo.save(r);
         }
 
@@ -40,13 +42,12 @@ public class DataLoader implements CommandLineRunner {
             admin.setTelefono("999999999");
             admin.setEmail("admin@admin.com");
             admin.setPassword(BCrypt.hashpw("admin123", BCrypt.gensalt()));
-            admin.setRol(rolRepo.findByNombre("ROLE_ADMIN"));
+            admin.setRol(rolRepo.findByNombre(ROLE_ADMIN));
             usuarioRepo.save(admin);
         } else {
-            // Si ya existe el usuario admin pero no tiene rol ADMIN, actualizarlo.
             Usuario existing = usuarioRepo.findByEmail("admin@admin.com");
-            if (existing != null && (existing.getRol() == null || !"ROLE_ADMIN".equals(existing.getRol().getNombre()))) {
-                existing.setRol(rolRepo.findByNombre("ROLE_ADMIN"));
+            if (existing != null && (existing.getRol() == null || !ROLE_ADMIN.equals(existing.getRol().getNombre()))) {
+                existing.setRol(rolRepo.findByNombre(ROLE_ADMIN));
                 usuarioRepo.save(existing);
             }
         }
