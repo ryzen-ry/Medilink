@@ -8,8 +8,8 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -46,8 +46,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+<<<<<<< HEAD
             // CSRF habilitado: Thymeleaf inyecta el token automáticamente en th:action
             // Los formularios HTML planos con action="" deben incluir el token manualmente (ver serviciosUser.html)
+=======
+            .csrf(Customizer.withDefaults())
+>>>>>>> b900a0f19eac12a3d10d58492817e2e374b63ea1
             .authenticationProvider(authenticationProvider())
 
             .authorizeHttpRequests(auth -> auth
