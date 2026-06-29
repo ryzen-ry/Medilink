@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Entity
 @Data
@@ -58,7 +59,7 @@ public class Cita {
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now(ZoneId.of("America/Lima"));
         if (this.estado == null) this.estado = "PENDIENTE";
     }
 }

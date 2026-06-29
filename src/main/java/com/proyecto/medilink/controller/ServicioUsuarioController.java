@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/USER")
 public class ServicioUsuarioController {
 
+    private static final String USUARIO_LOGUEADO = "usuarioLogueado";
+    private static final String REDIRECT_LOGIN = "redirect:/login";
+
     @Autowired
     private ServicioElegidoService serviciosService;
 
@@ -27,8 +30,8 @@ public class ServicioUsuarioController {
     @GetMapping("/serviciosUser")
     public String serviciosUser(Model model, HttpSession session) {
 
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        if (u == null) return "redirect:/login";
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+        if (u == null) return REDIRECT_LOGIN;
 
         model.addAttribute("servicios", serviciosService.listarPorUsuario(u));
         model.addAttribute("citas", citaService.listarPorUsuario(u));
@@ -45,8 +48,8 @@ public class ServicioUsuarioController {
                                   @RequestParam Double precio,
                                   HttpSession session) {
 
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        if (u == null) return "redirect:/login";
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+        if (u == null) return REDIRECT_LOGIN;
 
         ServicioElegido s = new ServicioElegido();
         s.setNombreServicio(nombre);
@@ -66,8 +69,8 @@ public class ServicioUsuarioController {
                               @RequestParam String fecha,
                               HttpSession session) {
 
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-        if (u == null) return "redirect:/login";
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+        if (u == null) return REDIRECT_LOGIN;
 
         Cita c = new Cita();
         c.setMotivo(motivo);
@@ -86,7 +89,7 @@ public class ServicioUsuarioController {
     @ResponseBody
     public Object historialAjax(HttpSession session) {
 
-        Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+        Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
         if (u == null) return null;
 
         return examenService.examsPorUsuario(u);
@@ -97,8 +100,8 @@ public class ServicioUsuarioController {
 @GetMapping("/salaVideoUser")
 public String salaVideoUser(HttpSession session) {
 
-    Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-    if (u == null) return "redirect:/login";
+    Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+    if (u == null) return REDIRECT_LOGIN;
 
     return "USER/salaVideoUser";  // nombre EXACTO del archivo HTML
 }
@@ -108,8 +111,8 @@ public String guardarServicioYRedirigir(
         @RequestParam Double precio,
         HttpSession session) {
 
-    Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-    if (u == null) return "redirect:/login";
+    Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+    if (u == null) return REDIRECT_LOGIN;
 
     ServicioElegido s = new ServicioElegido();
     s.setNombreServicio("Videoconsulta - " + nombre);  // 👈 AQUÍ LA MAGIA
@@ -131,7 +134,7 @@ public String guardarCitaFormulario(
         @RequestParam("motivo") String motivo,
         HttpSession session) {
 
-    Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
+    Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
 
     Cita cita = new Cita();
 
@@ -165,8 +168,8 @@ public String guardarCitaFormulario(
 // ✅ Cancelar cita por el propio usuario (si está PENDIENTE)
 @PostMapping("/citas/cancelar/{id}")
 public String cancelarCitaUsuario(@PathVariable Long id, HttpSession session) {
-    Usuario u = (Usuario) session.getAttribute("usuarioLogueado");
-    if (u == null) return "redirect:/login";
+    Usuario u = (Usuario) session.getAttribute(USUARIO_LOGUEADO);
+    if (u == null) return REDIRECT_LOGIN;
 
     Cita cita = citaService.obtenerPorId(id);
     if (cita != null && cita.getUsuario().getId().equals(u.getId()) && "PENDIENTE".equals(cita.getEstado())) {

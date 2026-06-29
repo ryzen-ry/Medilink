@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
+    private static final String REDIRECT_LOGIN = "redirect:/login";
+
     @GetMapping("/principal")
     public String home() {
         return "index";
@@ -19,17 +21,17 @@ public class MainController {
 
     @GetMapping("/servicios")
     public String servicios() {
-        return "redirect:/login";
+        return REDIRECT_LOGIN;
     }
 
     @GetMapping("/citas")
     public String citas() {
-        return "redirect:/login";
+        return REDIRECT_LOGIN;
     }
 
     @GetMapping("/contacto")
     public String contacto() {
-        return "redirect:/login";
+        return REDIRECT_LOGIN;
     }
 
     @GetMapping("/registro")
