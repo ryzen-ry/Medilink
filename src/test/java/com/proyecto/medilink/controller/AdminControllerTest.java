@@ -63,29 +63,29 @@ class AdminControllerTest {
 
     @BeforeEach
     void setUp() {
-        // ✅ Configurar rol admin
+        // Configurar rol admin
         adminRol = new Rol();
         adminRol.setId(1L);
         adminRol.setNombre("ROLE_ADMIN");
 
-        // ✅ Configurar rol user
+        // Configurar rol user
         userRol = new Rol();
         userRol.setId(2L);
         userRol.setNombre("ROLE_USER");
 
-        // ✅ Configurar usuario admin
+        // Configurar usuario admin
         adminUsuario = new Usuario();
         adminUsuario.setId(1L);
         adminUsuario.setNombre("Administrador");
         adminUsuario.setEmail("admin@admin.com");
         adminUsuario.setRol(adminRol);
 
-        // ✅ Configurar usuario normal (con rol USER)
+        // Configurar usuario normal
         normalUsuario = new Usuario();
         normalUsuario.setId(2L);
         normalUsuario.setNombre("Usuario Normal");
         normalUsuario.setEmail("user@user.com");
-        normalUsuario.setRol(userRol);  // ✅ AHORA TIENE ROL
+        normalUsuario.setRol(userRol);
 
         // Configurar doctor
         doctor = new Doctor();
@@ -116,16 +116,13 @@ class AdminControllerTest {
 
     @Test
     void testDashboard_UsuarioAdmin_DevuelveDashboard() {
-        // GIVEN: Usuario admin logueado
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(usuarioService.getAll()).thenReturn(new ArrayList<>());
         when(doctorService.getAllDoctores()).thenReturn(new ArrayList<>());
         when(citaService.listarTodas()).thenReturn(new ArrayList<>());
 
-        // WHEN
         String resultado = adminController.dashboard(session, model);
 
-        // THEN
         assertEquals("ADMIN/dashboard", resultado);
         verify(model).addAttribute("usuarioLogueado", adminUsuario);
         verify(model).addAttribute("usuarios", new ArrayList<>());
@@ -135,26 +132,20 @@ class AdminControllerTest {
 
     @Test
     void testDashboard_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN: Usuario normal (NO admin)
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
-        // WHEN
         String resultado = adminController.dashboard(session, model);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
         verify(model, never()).addAttribute(anyString(), any());
     }
 
     @Test
     void testDashboard_SinSesion_RedirigeLogin() {
-        // GIVEN: No hay usuario en sesión
         when(session.getAttribute("usuarioLogueado")).thenReturn(null);
 
-        // WHEN
         String resultado = adminController.dashboard(session, model);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
     }
 
@@ -164,25 +155,19 @@ class AdminControllerTest {
 
     @Test
     void testListarUsuarios_UsuarioAdmin_RedirigeDashboard() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
 
-        // WHEN
         String resultado = adminController.listarUsuarios(session, model);
 
-        // THEN
         assertEquals("redirect:/ADMIN/dashboard", resultado);
     }
 
     @Test
     void testListarUsuarios_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
-        // WHEN
         String resultado = adminController.listarUsuarios(session, model);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
     }
 
@@ -192,28 +177,22 @@ class AdminControllerTest {
 
     @Test
     void testCambiarRol_UsuarioAdmin_CambiaRol() {
-        // GIVEN
         Long userId = 2L;
         String nuevoRol = "ROLE_USER";
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
 
-        // WHEN
         String resultado = adminController.cambiarRol(userId, nuevoRol, session);
 
-        // THEN
         verify(usuarioService).cambiarRol(userId, nuevoRol);
         assertEquals("redirect:/ADMIN/usuarios", resultado);
     }
 
     @Test
     void testCambiarRol_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
-        // WHEN
         String resultado = adminController.cambiarRol(2L, "ROLE_USER", session);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
         verify(usuarioService, never()).cambiarRol(anyLong(), anyString());
     }
@@ -224,44 +203,47 @@ class AdminControllerTest {
 
     @Test
     void testEliminarUsuario_UsuarioAdmin_EliminaExitoso() {
-        // GIVEN
         Long userId = 2L;
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(usuarioService.eliminarUsuario(eq(userId), eq(adminUsuario.getEmail()))).thenReturn(true);
 
-        // WHEN
         String resultado = adminController.eliminarUsuario(userId, session);
 
-        // THEN
         verify(usuarioService).eliminarUsuario(userId, adminUsuario.getEmail());
         assertEquals("redirect:/ADMIN/dashboard?success=deleted", resultado);
     }
 
     @Test
     void testEliminarUsuario_UsuarioAdmin_FalloEliminar() {
-        // GIVEN
         Long userId = 2L;
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(usuarioService.eliminarUsuario(eq(userId), eq(adminUsuario.getEmail()))).thenReturn(false);
 
-        // WHEN
         String resultado = adminController.eliminarUsuario(userId, session);
 
-        // THEN
         assertEquals("redirect:/ADMIN/dashboard?error=delete_failed", resultado);
     }
 
     @Test
     void testEliminarUsuario_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
-        // WHEN
         String resultado = adminController.eliminarUsuario(2L, session);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
         verify(usuarioService, never()).eliminarUsuario(anyLong(), anyString());
+    }
+
+    @Test
+    void testEliminarUsuario_UsuarioAdmin_LanzaExcepcion() {
+        Long userId = 2L;
+        when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
+        when(usuarioService.eliminarUsuario(eq(userId), eq(adminUsuario.getEmail())))
+                .thenThrow(new RuntimeException("Error de base de datos"));
+
+        String resultado = adminController.eliminarUsuario(userId, session);
+
+        assertEquals("redirect:/ADMIN/usuarios?error=exception", resultado);
     }
 
     // ============================================================
@@ -270,14 +252,11 @@ class AdminControllerTest {
 
     @Test
     void testGestionDoctores_UsuarioAdmin_DevuelveVista() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(doctorService.getAllDoctores()).thenReturn(new ArrayList<>());
 
-        // WHEN
         String resultado = adminController.gestionDoctores(session, model);
 
-        // THEN
         assertEquals("ADMIN/gestionDoctores", resultado);
         verify(model).addAttribute(eq("doctor"), any(DoctorDTO.class));
         verify(model).addAttribute("doctores", new ArrayList<>());
@@ -286,13 +265,10 @@ class AdminControllerTest {
 
     @Test
     void testGestionDoctores_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
-        // WHEN
         String resultado = adminController.gestionDoctores(session, model);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
     }
 
@@ -302,77 +278,73 @@ class AdminControllerTest {
 
     @Test
     void testAgregarDoctor_UsuarioAdmin_Exitoso() {
-        // GIVEN
-        DoctorDTO doctorDTO = new DoctorDTO();
-        doctorDTO.setNombre("Dr. Juan");
-        doctorDTO.setApellidos("Pérez");
-        doctorDTO.setEspecialidad("Cardiología");
-        doctorDTO.setEmail("juan@doctor.com");
+        DoctorDTO doctorDTO = crearDoctorDTO();
 
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(bindingResult.hasErrors()).thenReturn(false);
 
-        // WHEN
         String resultado = adminController.agregarDoctor(
                 doctorDTO, bindingResult, session, model, imageFile);
 
-        // THEN
-        verify(doctorService).guardarDoctor(any(Doctor.class));
+        verify(doctorService).guardarDoctor(any(Doctor.class), any(MultipartFile.class));
         assertEquals("redirect:/ADMIN/doctores?success=created", resultado);
     }
 
     @Test
     void testAgregarDoctor_UsuarioAdmin_ConImagen() {
-        // GIVEN
-        DoctorDTO doctorDTO = new DoctorDTO();
-        doctorDTO.setNombre("Dr. Juan");
-        doctorDTO.setApellidos("Pérez");
-        doctorDTO.setEspecialidad("Cardiología");
-        doctorDTO.setEmail("juan@doctor.com");
+        DoctorDTO doctorDTO = crearDoctorDTO();
 
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(bindingResult.hasErrors()).thenReturn(false);
-        when(imageFile.isEmpty()).thenReturn(false);
-        when(imageFile.getOriginalFilename()).thenReturn("doctor.jpg");
+        // No stub necesarios para imageFile
 
-        // WHEN
         String resultado = adminController.agregarDoctor(
                 doctorDTO, bindingResult, session, model, imageFile);
 
-        // THEN
         verify(doctorService).guardarDoctor(any(Doctor.class), eq(imageFile));
         assertEquals("redirect:/ADMIN/doctores?success=created", resultado);
     }
 
     @Test
     void testAgregarDoctor_UsuarioAdmin_ErrorValidacion() {
-        // GIVEN
         DoctorDTO doctorDTO = new DoctorDTO();
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(bindingResult.hasErrors()).thenReturn(true);
         when(doctorService.getAllDoctores()).thenReturn(new ArrayList<>());
 
-        // WHEN
         String resultado = adminController.agregarDoctor(
                 doctorDTO, bindingResult, session, model, imageFile);
 
-        // THEN
         assertEquals("ADMIN/gestionDoctores", resultado);
-        verify(doctorService, never()).guardarDoctor(any(Doctor.class));
+        verify(doctorService, never()).guardarDoctor(any(Doctor.class), any(MultipartFile.class));
     }
 
     @Test
     void testAgregarDoctor_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
-        // WHEN
         String resultado = adminController.agregarDoctor(
                 new DoctorDTO(), bindingResult, session, model, imageFile);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
-        verify(doctorService, never()).guardarDoctor(any(Doctor.class));
+        verify(doctorService, never()).guardarDoctor(any(Doctor.class), any(MultipartFile.class));
+    }
+
+    @Test
+    void testAgregarDoctor_UsuarioAdmin_LanzaExcepcion() {
+        DoctorDTO doctorDTO = crearDoctorDTO();
+
+        when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
+        when(bindingResult.hasErrors()).thenReturn(false);
+        doThrow(new RuntimeException("Email duplicado"))
+                .when(doctorService).guardarDoctor(any(Doctor.class), any(MultipartFile.class));
+        when(doctorService.getAllDoctores()).thenReturn(new ArrayList<>());
+
+        String resultado = adminController.agregarDoctor(
+                doctorDTO, bindingResult, session, model, imageFile);
+
+        assertEquals("ADMIN/gestionDoctores", resultado);
+        verify(model).addAttribute(eq("error"), anyString());
     }
 
     // ============================================================
@@ -381,29 +353,34 @@ class AdminControllerTest {
 
     @Test
     void testEliminarDoctor_UsuarioAdmin_Exitoso() {
-        // GIVEN
         Long doctorId = 1L;
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
 
-        // WHEN
         String resultado = adminController.eliminarDoctor(doctorId, session);
 
-        // THEN
         verify(doctorService).eliminarDoctor(doctorId);
         assertEquals("redirect:/ADMIN/doctores?success=deleted", resultado);
     }
 
     @Test
     void testEliminarDoctor_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
-        // WHEN
         String resultado = adminController.eliminarDoctor(1L, session);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
         verify(doctorService, never()).eliminarDoctor(anyLong());
+    }
+
+    @Test
+    void testEliminarDoctor_UsuarioAdmin_LanzaExcepcion() {
+        Long doctorId = 1L;
+        when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
+        doThrow(new RuntimeException("Error al eliminar")).when(doctorService).eliminarDoctor(doctorId);
+
+        String resultado = adminController.eliminarDoctor(doctorId, session);
+
+        assertEquals("redirect:/ADMIN/doctores?error=delete_failed", resultado);
     }
 
     // ============================================================
@@ -412,17 +389,14 @@ class AdminControllerTest {
 
     @Test
     void testConfirmarCita_UsuarioAdmin_Exitoso() {
-        // GIVEN
         Long citaId = 1L;
         Long doctorId = 1L;
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(citaService.obtenerPorId(citaId)).thenReturn(cita);
         when(doctorService.getAllDoctores()).thenReturn(Arrays.asList(doctor));
 
-        // WHEN
         String resultado = adminController.confirmarCita(citaId, doctorId, session);
 
-        // THEN
         verify(citaService).guardar(cita);
         assertEquals("CONFIRMADA", cita.getEstado());
         assertEquals("redirect:/ADMIN/dashboard?success=appointment_confirmed", resultado);
@@ -430,29 +404,23 @@ class AdminControllerTest {
 
     @Test
     void testConfirmarCita_UsuarioAdmin_CitaNoEncontrada() {
-        // GIVEN
         Long citaId = 999L;
         Long doctorId = 1L;
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(citaService.obtenerPorId(citaId)).thenReturn(null);
 
-        // WHEN
         String resultado = adminController.confirmarCita(citaId, doctorId, session);
 
-        // THEN
         verify(citaService, never()).guardar(any(Cita.class));
         assertEquals("redirect:/ADMIN/dashboard?error=appointment_confirmation_failed", resultado);
     }
 
     @Test
     void testConfirmarCita_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
-        // WHEN
         String resultado = adminController.confirmarCita(1L, 1L, session);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
         verify(citaService, never()).guardar(any(Cita.class));
     }
@@ -463,15 +431,12 @@ class AdminControllerTest {
 
     @Test
     void testCancelarCita_UsuarioAdmin_Exitoso() {
-        // GIVEN
         Long citaId = 1L;
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(citaService.obtenerPorId(citaId)).thenReturn(cita);
 
-        // WHEN
         String resultado = adminController.cancelarCita(citaId, session);
 
-        // THEN
         verify(citaService).guardar(cita);
         assertEquals("CANCELADA", cita.getEstado());
         assertEquals("redirect:/ADMIN/dashboard?success=appointment_canceled", resultado);
@@ -479,28 +444,22 @@ class AdminControllerTest {
 
     @Test
     void testCancelarCita_UsuarioAdmin_CitaNoEncontrada() {
-        // GIVEN
         Long citaId = 999L;
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(citaService.obtenerPorId(citaId)).thenReturn(null);
 
-        // WHEN
         String resultado = adminController.cancelarCita(citaId, session);
 
-        // THEN
         verify(citaService, never()).guardar(any(Cita.class));
         assertEquals("redirect:/ADMIN/dashboard?error=appointment_cancelation_failed", resultado);
     }
 
     @Test
     void testCancelarCita_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
-        // WHEN
         String resultado = adminController.cancelarCita(1L, session);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
         verify(citaService, never()).guardar(any(Cita.class));
     }
@@ -511,7 +470,6 @@ class AdminControllerTest {
 
     @Test
     void testAgregarExamen_UsuarioAdmin_Exitoso() {
-        // GIVEN
         Long usuarioId = 2L;
         String tipo = "Análisis de sangre";
         String descripcion = "Hemograma completo";
@@ -520,17 +478,14 @@ class AdminControllerTest {
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(usuarioService.getAll()).thenReturn(Arrays.asList(adminUsuario, normalUsuario));
 
-        // WHEN
         String resultado = adminController.agregarExamen(usuarioId, tipo, descripcion, fecha, session);
 
-        // THEN
         verify(examenService).guardar(any(Examen.class));
         assertEquals("redirect:/ADMIN/dashboard?success=exam_added", resultado);
     }
 
     @Test
     void testAgregarExamen_UsuarioAdmin_UsuarioNoEncontrado() {
-        // GIVEN
         Long usuarioId = 999L;
         String tipo = "Análisis";
         String descripcion = "Prueba";
@@ -539,80 +494,32 @@ class AdminControllerTest {
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(usuarioService.getAll()).thenReturn(Arrays.asList(adminUsuario));
 
-        // WHEN
         String resultado = adminController.agregarExamen(usuarioId, tipo, descripcion, fecha, session);
 
-        // THEN
         verify(examenService, never()).guardar(any(Examen.class));
         assertEquals("redirect:/ADMIN/dashboard?error=exam_add_failed", resultado);
     }
 
     @Test
     void testAgregarExamen_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
-        // WHEN
         String resultado = adminController.agregarExamen(1L, "Tipo", "Desc", "2026-07-15", session);
 
-        // THEN
         assertEquals("redirect:/login", resultado);
         verify(examenService, never()).guardar(any(Examen.class));
     }
 
     // ============================================================
-    // 11. PRUEBA ADICIONAL: Cobertura de excepciones
+    // MÉTODO AUXILIAR
     // ============================================================
 
-    @Test
-    void testEliminarUsuario_UsuarioAdmin_LanzaExcepcion() {
-        // GIVEN
-        Long userId = 2L;
-        when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
-        when(usuarioService.eliminarUsuario(eq(userId), eq(adminUsuario.getEmail())))
-                .thenThrow(new RuntimeException("Error de base de datos"));
-
-        // WHEN
-        String resultado = adminController.eliminarUsuario(userId, session);
-
-        // THEN
-        assertEquals("redirect:/ADMIN/usuarios?error=exception", resultado);
-    }
-
-    @Test
-    void testEliminarDoctor_UsuarioAdmin_LanzaExcepcion() {
-        // GIVEN
-        Long doctorId = 1L;
-        when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
-        doThrow(new RuntimeException("Error al eliminar")).when(doctorService).eliminarDoctor(doctorId);
-
-        // WHEN
-        String resultado = adminController.eliminarDoctor(doctorId, session);
-
-        // THEN
-        assertEquals("redirect:/ADMIN/doctores?error=delete_failed", resultado);
-    }
-
-    @Test
-    void testAgregarDoctor_UsuarioAdmin_LanzaExcepcion() {
-        // GIVEN
-        DoctorDTO doctorDTO = new DoctorDTO();
-        doctorDTO.setNombre("Dr. Juan");
-        doctorDTO.setApellidos("Pérez");
-        doctorDTO.setEspecialidad("Cardiología");
-        doctorDTO.setEmail("juan@doctor.com");
-
-        when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
-        when(bindingResult.hasErrors()).thenReturn(false);
-        doThrow(new RuntimeException("Email duplicado")).when(doctorService).guardarDoctor(any(Doctor.class));
-        when(doctorService.getAllDoctores()).thenReturn(new ArrayList<>());
-
-        // WHEN
-        String resultado = adminController.agregarDoctor(
-                doctorDTO, bindingResult, session, model, imageFile);
-
-        // THEN
-        assertEquals("ADMIN/gestionDoctores", resultado);
-        verify(model).addAttribute("error", "Email duplicado");
+    private DoctorDTO crearDoctorDTO() {
+        DoctorDTO dto = new DoctorDTO();
+        dto.setNombre("Dr. Juan");
+        dto.setApellidos("Pérez");
+        dto.setEspecialidad("Cardiología");
+        dto.setEmail("juan@doctor.com");
+        return dto;
     }
 }
