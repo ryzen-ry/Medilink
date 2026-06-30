@@ -18,12 +18,10 @@ public class DataLoader implements CommandLineRunner {
     private static final String ROLE_ADMIN = "ROLE_ADMIN";
     private static final String ROLE_USER = "ROLE_USER";
     private static final String ADMIN_EMAIL = "admin@admin.com";
-    private static final String DEFAULT_PASS = "admin123"; // Solo para desarrollo
 
     private final RolRepository rolRepo;
     private final UsuarioRepository usuarioRepo;
 
-    // ✅ Constructor injection (en lugar de @Autowired en campos)
     public DataLoader(RolRepository rolRepo, UsuarioRepository usuarioRepo) {
         this.rolRepo = rolRepo;
         this.usuarioRepo = usuarioRepo;
@@ -53,16 +51,18 @@ public class DataLoader implements CommandLineRunner {
             admin.setTelefono("999999999");
             admin.setEmail(ADMIN_EMAIL);
             
-            // 🔒 La contraseña se lee desde variable de entorno
-            String adminPassword = System.getenv("ADMIN_PASSWORD");
+            // 🔒 La contraseña se lee desde variable de entorno (OBLIGATORIO)
+            String adPass = System.getenv("ADPASS");
             
-            // ⚠️ Si no existe variable de entorno, USAR SOLO PARA DESARROLLO
-            if (admiPass == null || admiPass.isEmpty()) {
-                admiPass = DEFAULT_PASS; // Solo para desarrollo local
-                logger.warn("⚠️  ADVERTENCIA: Usando contraseña por defecto. Setea ADMIN_PASSWORD en producción.");
+            // ❌ Si no existe variable de entorno, el sistema NO debe iniciar
+            if (adPass == null || adPass.isEmpty()) {
+                String errorMsg = "❌ ADPASS no está configurada. " +
+                    "Por favor, setea la variable de entorno ADPASS antes de iniciar la aplicación.";
+                logger.error(errorMsg);
+                throw new IllegalStateException(errorMsg);
             }
             
-            admin.setPassword(BCrypt.hashpw(admiPass, BCrypt.gensalt()));
+            admin.setPassword(BCrypt.hashpw(adPass, BCrypt.gensalt()));
             admin.setRol(rolRepo.findByNombre(ROLE_ADMIN));
             usuarioRepo.save(admin);
             logger.info("✅ Administrador creado con éxito.");
