@@ -166,7 +166,10 @@
                                 </div>
                                 
                                 <div>
-                                    <h5 class="card-title mb-1 fw-bold text-dark" th:text="'Dr. ' + ${doc.nombre} + ' ' + ${doc.apellidos}"></h5>
+                                    <h5 class="card-title mb-1 fw-bold text-dark" 
+                                        th:text="'Dr. ' + ${doc.nombre} + ' ' + ${doc.apellidos}"
+                                        th:aria-label="'Doctor ' + ${doc.nombre} + ' ' + ${doc.apellidos}">
+                                    </h5>
                                     <p class="text-success text-uppercase small fw-bold mb-2" th:text="${doc.especialidad}"></p>
                                     <p class="text-muted small mb-0"><i class="fa-solid fa-id-card me-1"></i> CMP: <span th:text="${doc.numeroColegiatura}"></span></p>
                                 </div>
