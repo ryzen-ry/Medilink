@@ -3,7 +3,7 @@ package com.proyecto.medilink.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
-
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -11,7 +11,9 @@ import java.time.ZoneId;
 @Entity
 @Data
 @Table(name = "citas")
-public class Cita {
+public class Cita implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
