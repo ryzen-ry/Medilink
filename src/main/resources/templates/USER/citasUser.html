@@ -84,6 +84,7 @@
                     <div class="card shadow-sm border p-4">
                         <div class="card-body">
                             <form th:action="@{/USER/guardarCitaFormulario}" method="post">
+                                <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
                                 
                                 <!-- Sección 1 -->
                                 <h5 class="mb-3 fw-bold text-primary"><i class="fa-solid fa-user me-2"></i> Paso 1: Información del Paciente</h5>

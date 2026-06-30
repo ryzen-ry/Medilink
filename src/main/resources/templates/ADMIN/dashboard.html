@@ -369,6 +369,7 @@
                                 </td>
                                 <td>
                                     <form th:action="@{/ADMIN/cambiar-rol/{id}(id=${usuario.id})}" method="post" class="d-inline-flex gap-2 align-items-center">
+                                        <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
                                         <label for="rol-${usuario.id}" class="visually-hidden">Cambiar rol de usuario</label>
                                         <select id="rol-${usuario.id}" name="nuevoRol" class="form-select form-select-sm" style="width: auto;">
                                             <option value="ROLE_USER" th:selected="${usuario.rol.nombre == 'ROLE_USER'}">Usuario</option>
@@ -380,6 +381,7 @@
                                 <td>
                                     <span th:if="${usuario.email == session.usuarioLogueado.email}" class="text-muted small fw-semibold">Tú mismo</span>
                                     <form th:if="${usuario.email != session.usuarioLogueado.email}" th:action="@{/ADMIN/eliminar/{id}(id=${usuario.id})}" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar a este usuario?');">
+                                        <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
                                         <button class="btn btn-sm btn-outline-danger py-1 px-2" type="submit">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
@@ -434,6 +436,7 @@
                                 <td>
                                     <div th:if="${cita.estado == 'PENDIENTE'}" class="d-flex flex-column gap-2 align-items-center">
                                         <form th:action="@{/ADMIN/citas/confirmar/{id}(id=${cita.id})}" method="post" class="d-flex gap-1 align-items-center">
+                                            <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
                                             <label for="doctor-${cita.id}" class="visually-hidden">Seleccionar médico</label>
                                             <select id="doctor-${cita.id}" name="doctorId" class="form-select form-select-sm" required style="width: 150px;">
                                                 <option value="" disabled selected>Elegir Médico</option>
@@ -442,6 +445,7 @@
                                             <button class="btn btn-sm btn-success py-1" type="submit">Confirmar</button>
                                         </form>
                                         <form th:action="@{/ADMIN/citas/cancelar/{id}(id=${cita.id})}" method="post">
+                                            <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
                                             <button class="btn btn-sm btn-danger py-1 w-100" type="submit">Cancelar Cita</button>
                                         </form>
                                     </div>
@@ -495,6 +499,7 @@
                                 <td th:text="${doctor.telefono}"></td>
                                 <td>
                                     <form th:action="@{/ADMIN/doctores/eliminar/{id}(id=${doctor.id})}" method="post" onsubmit="return confirm('¿Seguro que deseas eliminar este doctor?');">
+                                        <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
                                         <button type="submit" class="btn btn-sm btn-outline-danger py-1 px-2">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
@@ -516,6 +521,7 @@
                         <p class="text-muted text-center small mb-4">Añade los resultados de exámenes, diagnósticos o recetas médicas al historial de un paciente.</p>
                         
                         <form th:action="@{/ADMIN/usuarios/examenes/agregar}" method="post">
+                            <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
                             <div class="mb-3">
                                 <label for="usuarioId" class="form-label fw-semibold">Seleccionar Paciente</label>
                                 <select id="usuarioId" name="usuarioId" class="form-select" required>
