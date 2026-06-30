@@ -3,11 +3,14 @@ package com.proyecto.medilink.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import java.io.Serializable;
 
 @Entity
 @Data
 @Table(name = "servicios_elegidos")
-public class ServicioElegido {
+public class ServicioElegido implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
