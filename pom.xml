@@ -130,8 +130,8 @@
 						<configuration>
 							<formats>
 								<format>XML</format>
-								<format>html</format>
-								<format>csv</format>
+								<format>HTML</format>
+								<format>CSV</format>
 							</formats>
 						</configuration>
 					</execution>
