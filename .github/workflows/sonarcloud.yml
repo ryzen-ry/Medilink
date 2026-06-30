@@ -53,10 +53,11 @@ jobs:
 
       - name: Build with Maven
         env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/prueba?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-          SPRING_DATASOURCE_USERNAME: root
-          SPRING_DATASOURCE_PASSWORD: 12345678
-          ADPASS: ${{ secrets.ADPASS }}  # ✅ AGREGAR AQUÍ
+          # ✅ AHORA USA MYSQL_URL (sin jdbc:)
+          MYSQL_URL: mysql://localhost:3306/prueba?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+          MYSQL_USER: root
+          MYSQL_ROOT_PASSWORD: 12345678
+          ADPASS: ${{ secrets.ADPASS }}
         run: mvn -B clean verify
 
       - name: Debug Jacoco report
@@ -76,7 +77,7 @@ jobs:
       - name: SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          ADPASS: ${{ secrets.ADPASS }}  # ✅ AGREGAR TAMBIÉN AQUÍ
+          ADPASS: ${{ secrets.ADPASS }}
         run: |
           mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }} \
