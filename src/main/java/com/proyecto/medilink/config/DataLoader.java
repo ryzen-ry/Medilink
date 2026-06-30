@@ -6,6 +6,7 @@ import com.proyecto.medilink.repository.RolRepository;
 import com.proyecto.medilink.repository.UsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.mindrot.jbcrypt.BCrypt;
@@ -21,6 +22,9 @@ public class DataLoader implements CommandLineRunner {
 
     private final RolRepository rolRepo;
     private final UsuarioRepository usuarioRepo;
+
+    @Value("${ADPASS:}")
+    private String adPass;  // ✅ Lee desde application.properties o variable de entorno
 
     public DataLoader(RolRepository rolRepo, UsuarioRepository usuarioRepo) {
         this.rolRepo = rolRepo;
@@ -50,18 +54,15 @@ public class DataLoader implements CommandLineRunner {
             admin.setDni("00000000");
             admin.setTelefono("999999999");
             admin.setEmail(ADMIN_EMAIL);
-            
-            // 🔒 La contraseña se lee desde variable de entorno (OBLIGATORIO)
-            String adPass = System.getenv("ADPASS");
-            
-            // ❌ Si no existe variable de entorno, el sistema NO debe iniciar
+
+            // ✅ Usa la variable que viene de application.properties o variable de entorno
             if (adPass == null || adPass.isEmpty()) {
                 String errorMsg = "❌ ADPASS no está configurada. " +
-                    "Por favor, setea la variable de entorno ADPASS antes de iniciar la aplicación.";
+                    "Por favor, setea la variable de entorno ADPASS o configúrala en application.properties";
                 logger.error(errorMsg);
                 throw new IllegalStateException(errorMsg);
             }
-            
+
             admin.setPassword(BCrypt.hashpw(adPass, BCrypt.gensalt()));
             admin.setRol(rolRepo.findByNombre(ROLE_ADMIN));
             usuarioRepo.save(admin);
