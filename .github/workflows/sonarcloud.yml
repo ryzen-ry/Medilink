@@ -52,11 +52,12 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Build with Maven
-        run: mvn -B clean verify
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/prueba?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
           SPRING_DATASOURCE_USERNAME: root
           SPRING_DATASOURCE_PASSWORD: 12345678
+          ADPASS: ${{ secrets.ADPASS }}  # ✅ AGREGAR AQUÍ
+        run: mvn -B clean verify
 
       - name: Debug Jacoco report
         run: |
@@ -75,6 +76,7 @@ jobs:
       - name: SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          ADPASS: ${{ secrets.ADPASS }}  # ✅ AGREGAR TAMBIÉN AQUÍ
         run: |
           mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }} \
