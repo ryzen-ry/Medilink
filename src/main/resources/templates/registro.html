@@ -17,6 +17,7 @@
     <h2 class="text-center text-primary mb-4 fw-bold">Crear Cuenta</h2>
 
     <form th:action="@{/registro}" th:object="${usuario}" method="post">
+      <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
       <div class="mb-3">
         <label for="nombre" class="form-label fw-semibold">Nombre completo</label>
         <input id="nombre" type="text" class="form-control" th:field="*{nombre}" placeholder="Juan Pérez" required>

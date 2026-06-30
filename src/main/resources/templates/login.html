@@ -17,6 +17,7 @@
     <h2 class="text-center text-primary mb-4 fw-bold">Iniciar Sesión</h2>
 
     <form th:action="@{/procesar-login}" th:object="${loginDTO}" method="post">
+      <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
       <div class="mb-3">
         <label for="email" class="form-label fw-semibold">Correo electrónico</label>
         <input id="email" class="form-control" type="email" th:field="*{email}" placeholder="ejemplo@correo.com" required>
