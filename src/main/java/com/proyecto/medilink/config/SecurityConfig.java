@@ -19,13 +19,11 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
-    // El encoder BCrypt (compatible con las contraseñas almacenadas con BCrypt)
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // AuthenticationProvider usando tu UserDetailsService y BCrypt
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider prov = new DaoAuthenticationProvider();
@@ -34,17 +32,15 @@ public class SecurityConfig {
         return prov;
     }
 
-    // AuthenticationManager (necesario en algunas versiones)
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
-    // Chain de seguridad
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // si quieres CSRF habilitado, habría que adaptar formulario
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/css/**", "/img/**", "/js/**"))
             .authenticationProvider(authenticationProvider())
 
             .authorizeHttpRequests(auth -> auth
@@ -57,9 +53,9 @@ public class SecurityConfig {
 
             .formLogin(form -> form
                 .loginPage("/login")
-                .loginProcessingUrl("/procesar-login")   // la URL que procesa el POST
-                .usernameParameter("email")              // <-- IMPORTANTE: tu campo es 'email'
-                .passwordParameter("password")           // por defecto 'password' está bien
+                .loginProcessingUrl("/procesar-login")
+                .usernameParameter("email")
+                .passwordParameter("password")
                 .defaultSuccessUrl("/redireccion", true)
                 .failureUrl("/login?error")
                 .permitAll()

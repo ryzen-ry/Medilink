@@ -62,6 +62,7 @@
                 </div>
                 <div class="card-body">
                     <form th:action="@{/ADMIN/doctores/agregar}" th:object="${doctor}" method="post" enctype="multipart/form-data">
+                        <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input id="nombre" type="text" class="form-control" th:field="*{nombre}" required>
@@ -146,6 +147,7 @@
                                               method="post"
                                               class="d-inline"
                                               onsubmit="return confirm('¿Seguro que deseas eliminar este doctor?');">
+                                            <!-- ✅ CSRF: Thymeleaf lo agrega automáticamente por usar th:action -->
                                             <button type="submit" class="btn btn-danger btn-sm">
                                                 <i class="fas fa-trash"></i>
                                                 Eliminar
