@@ -56,25 +56,36 @@ class AdminControllerTest {
     private Usuario adminUsuario;
     private Usuario normalUsuario;
     private Rol adminRol;
+    private Rol userRol;
     private Doctor doctor;
     private Cita cita;
+    private Examen examen;
 
     @BeforeEach
     void setUp() {
-        // Configurar rol admin
+        // ✅ Configurar rol admin
         adminRol = new Rol();
+        adminRol.setId(1L);
         adminRol.setNombre("ROLE_ADMIN");
 
-        // Configurar usuario admin
+        // ✅ Configurar rol user
+        userRol = new Rol();
+        userRol.setId(2L);
+        userRol.setNombre("ROLE_USER");
+
+        // ✅ Configurar usuario admin
         adminUsuario = new Usuario();
         adminUsuario.setId(1L);
+        adminUsuario.setNombre("Administrador");
         adminUsuario.setEmail("admin@admin.com");
         adminUsuario.setRol(adminRol);
 
-        // Configurar usuario normal
+        // ✅ Configurar usuario normal (con rol USER)
         normalUsuario = new Usuario();
         normalUsuario.setId(2L);
+        normalUsuario.setNombre("Usuario Normal");
         normalUsuario.setEmail("user@user.com");
+        normalUsuario.setRol(userRol);  // ✅ AHORA TIENE ROL
 
         // Configurar doctor
         doctor = new Doctor();
@@ -82,11 +93,21 @@ class AdminControllerTest {
         doctor.setNombre("Dr. Juan");
         doctor.setApellidos("Pérez");
         doctor.setEspecialidad("Cardiología");
+        doctor.setEmail("juan@doctor.com");
 
         // Configurar cita
         cita = new Cita();
         cita.setId(1L);
+        cita.setMotivo("Consulta general");
         cita.setEstado("PENDIENTE");
+        cita.setUsuario(normalUsuario);
+
+        // Configurar examen
+        examen = new Examen();
+        examen.setId(1L);
+        examen.setTipo("Análisis de sangre");
+        examen.setDescripcion("Hemograma completo");
+        examen.setFecha(LocalDate.now());
     }
 
     // ============================================================
@@ -114,7 +135,7 @@ class AdminControllerTest {
 
     @Test
     void testDashboard_UsuarioNoAdmin_RedirigeLogin() {
-        // GIVEN: Usuario sin rol admin
+        // GIVEN: Usuario normal (NO admin)
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
 
         // WHEN
@@ -312,6 +333,7 @@ class AdminControllerTest {
         when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
         when(bindingResult.hasErrors()).thenReturn(false);
         when(imageFile.isEmpty()).thenReturn(false);
+        when(imageFile.getOriginalFilename()).thenReturn("doctor.jpg");
 
         // WHEN
         String resultado = adminController.agregarDoctor(
@@ -456,6 +478,21 @@ class AdminControllerTest {
     }
 
     @Test
+    void testCancelarCita_UsuarioAdmin_CitaNoEncontrada() {
+        // GIVEN
+        Long citaId = 999L;
+        when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
+        when(citaService.obtenerPorId(citaId)).thenReturn(null);
+
+        // WHEN
+        String resultado = adminController.cancelarCita(citaId, session);
+
+        // THEN
+        verify(citaService, never()).guardar(any(Cita.class));
+        assertEquals("redirect:/ADMIN/dashboard?error=appointment_cancelation_failed", resultado);
+    }
+
+    @Test
     void testCancelarCita_UsuarioNoAdmin_RedirigeLogin() {
         // GIVEN
         when(session.getAttribute("usuarioLogueado")).thenReturn(normalUsuario);
@@ -521,5 +558,61 @@ class AdminControllerTest {
         // THEN
         assertEquals("redirect:/login", resultado);
         verify(examenService, never()).guardar(any(Examen.class));
+    }
+
+    // ============================================================
+    // 11. PRUEBA ADICIONAL: Cobertura de excepciones
+    // ============================================================
+
+    @Test
+    void testEliminarUsuario_UsuarioAdmin_LanzaExcepcion() {
+        // GIVEN
+        Long userId = 2L;
+        when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
+        when(usuarioService.eliminarUsuario(eq(userId), eq(adminUsuario.getEmail())))
+                .thenThrow(new RuntimeException("Error de base de datos"));
+
+        // WHEN
+        String resultado = adminController.eliminarUsuario(userId, session);
+
+        // THEN
+        assertEquals("redirect:/ADMIN/usuarios?error=exception", resultado);
+    }
+
+    @Test
+    void testEliminarDoctor_UsuarioAdmin_LanzaExcepcion() {
+        // GIVEN
+        Long doctorId = 1L;
+        when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
+        doThrow(new RuntimeException("Error al eliminar")).when(doctorService).eliminarDoctor(doctorId);
+
+        // WHEN
+        String resultado = adminController.eliminarDoctor(doctorId, session);
+
+        // THEN
+        assertEquals("redirect:/ADMIN/doctores?error=delete_failed", resultado);
+    }
+
+    @Test
+    void testAgregarDoctor_UsuarioAdmin_LanzaExcepcion() {
+        // GIVEN
+        DoctorDTO doctorDTO = new DoctorDTO();
+        doctorDTO.setNombre("Dr. Juan");
+        doctorDTO.setApellidos("Pérez");
+        doctorDTO.setEspecialidad("Cardiología");
+        doctorDTO.setEmail("juan@doctor.com");
+
+        when(session.getAttribute("usuarioLogueado")).thenReturn(adminUsuario);
+        when(bindingResult.hasErrors()).thenReturn(false);
+        doThrow(new RuntimeException("Email duplicado")).when(doctorService).guardarDoctor(any(Doctor.class));
+        when(doctorService.getAllDoctores()).thenReturn(new ArrayList<>());
+
+        // WHEN
+        String resultado = adminController.agregarDoctor(
+                doctorDTO, bindingResult, session, model, imageFile);
+
+        // THEN
+        assertEquals("ADMIN/gestionDoctores", resultado);
+        verify(model).addAttribute("error", "Email duplicado");
     }
 }
