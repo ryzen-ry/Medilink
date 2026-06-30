@@ -255,7 +255,9 @@
         </div>
     </footer>
 
-    <!-- MODAL SERVICIO (Videollamada) -->
+    <!-- ============================================================ -->
+    <!-- MODAL SERVICIO (Videollamada) - UNICO -->
+    <!-- ============================================================ -->
     <div class="modal fade" id="modalServicio" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -265,21 +267,22 @@
                 </div>
 
                 <div class="modal-body">
-                    <label for="especialidad" class="fw-bold mb-2">Selecciona la Especialidad:</label>
-                    <select id="especialidad" class="form-select mb-3">
+                    <label for="especialidadModal" class="fw-bold mb-2">Selecciona la Especialidad:</label>
+                    <select id="especialidadModal" class="form-select mb-3">
                         <option value="">-- Seleccionar --</option>
                         <option value="Pediatría">Pediatría</option>
                         <option value="Dermatología">Dermatología</option>
                         <option value="Cardiología">Cardiología</option>
                     </select>
 
-                    <div id="precioBox" class="d-none">
-                        <label for="precio" class="fw-bold mb-2">Precio de la Consulta:</label>
-                        <input class="form-control mb-3" id="precio" value="35.00" readonly>
+                    <div id="precioBoxModal" class="d-none">
+                        <label for="precioModal" class="fw-bold mb-2">Precio de la Consulta:</label>
+                        <input class="form-control mb-3" id="precioModal" value="35.00" readonly>
 
-                        <form id="formServicio" action="/USER/guardarServicioYRedirigir" method="post">
-                            <input type="hidden" name="nombre" id="nombreServicio">
-                            <input type="hidden" name="precio" id="precioServicio">
+                        <form id="formServicioModal" action="/USER/guardarServicioYRedirigir" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <input type="hidden" name="nombre" id="nombreServicioModal">
+                            <input type="hidden" name="precio" id="precioServicioModal">
                             <button type="submit" class="btn btn-primary w-100 py-2">
                                 <i class="fa-solid fa-video me-1"></i> Confirmar y Entrar a Sala
                             </button>
@@ -290,25 +293,31 @@
         </div>
     </div>
 
-            <div class="modal-body">
-                <label for="especialidad" class="fw-bold mb-2">Selecciona la Especialidad:</label>
-                <select id="especialidad" class="form-select mb-3">
-                    <option value="">-- Seleccionar --</option>
-                    <option value="Pediatría">Pediatría</option>
-                    <option value="Dermatología">Dermatología</option>
-                    <option value="Cardiología">Cardiología</option>
-                </select>
+    <!-- ============================================================ -->
+    <!-- MODAL PRECIOS (Planes) -->
+    <!-- ============================================================ -->
+    <div class="modal fade" id="modalPrecios" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title fw-bold">Elegir Plan de Monitoreo</h5>
+                    <button class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
 
-                <div id="precioBox" class="d-none">
-                    <label for="precio" class="fw-bold mb-2">Precio de la Consulta:</label>
-                    <input class="form-control mb-3" id="precio" value="35.00" readonly>
-
-                    <form id="formServicio" action="/USER/guardarServicioYRedirigir" method="post">
+                <div class="modal-body text-center p-4">
+                    <p class="text-muted small mb-4">Adquiere un plan y mantén tu salud controlada las 24 horas del día.</p>
+                    <form action="/USER/guardarServicio" method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                        <input type="hidden" name="nombre" id="nombreServicio">
-                        <input type="hidden" name="precio" id="precioServicio">
-                        <button type="submit" class="btn btn-primary w-100 py-2">
-                            <i class="fa-solid fa-video me-1"></i> Confirmar y Entrar a Sala
+                        <input type="hidden" name="nombre" value="Monitoreo Crónico">
+                        
+                        <button class="btn btn-outline-success w-100 mb-3 py-2 fw-semibold" name="precio" value="49">
+                            Plan Básico - S/ 49
+                        </button>
+                        <button class="btn btn-outline-success w-100 mb-3 py-2 fw-semibold" name="precio" value="89">
+                            Plan Intermedio - S/ 89
+                        </button>
+                        <button class="btn btn-outline-success w-100 py-2 fw-semibold" name="precio" value="129">
+                            Plan Premium - S/ 129
                         </button>
                     </form>
                 </div>
@@ -316,35 +325,16 @@
         </div>
     </div>
 
-            <div class="modal-body text-center p-4">
-                <p class="text-muted small mb-4">Adquiere un plan y mantén tu salud controlada las 24 horas del día.</p>
-                <form action="/USER/guardarServicio" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                    <input type="hidden" name="nombre" value="Monitoreo Crónico">
-                    
-                    <button class="btn btn-outline-success w-100 mb-3 py-2 fw-semibold" name="precio" value="49">
-                        Plan Básico - S/ 49
-                    </button>
-                    <button class="btn btn-outline-success w-100 mb-3 py-2 fw-semibold" name="precio" value="89">
-                        Plan Intermedio - S/ 89
-                    </button>
-                    <button class="btn btn-outline-success w-100 py-2 fw-semibold" name="precio" value="129">
-                        Plan Premium - S/ 129
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL HISTORIAL (Exámenes) -->
-<div class="modal fade" id="modalHistorial" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-warning">
-                <h5 class="modal-title fw-bold">Historial de Exámenes Médicos</h5>
-                <button class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+    <!-- ============================================================ -->
+    <!-- MODAL HISTORIAL (Exámenes) -->
+    <!-- ============================================================ -->
+    <div class="modal fade" id="modalHistorial" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title fw-bold">Historial de Exámenes Médicos</h5>
+                    <button class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
                 <div class="modal-body p-4">
                     <div th:if="${#lists.isEmpty(examenes)}" class="alert alert-light text-center py-4 border">
@@ -375,10 +365,10 @@
 
     <!-- SCRIPTS DE MODALES -->
     <script>
-        const esp = document.getElementById("especialidad");
-        const precioBox = document.getElementById("precioBox");
-        const nombreServicio = document.getElementById("nombreServicio");
-        const precioServicio = document.getElementById("precioServicio");
+        const esp = document.getElementById("especialidadModal");
+        const precioBox = document.getElementById("precioBoxModal");
+        const nombreServicio = document.getElementById("nombreServicioModal");
+        const precioServicio = document.getElementById("precioServicioModal");
 
         esp.addEventListener("change", () => {
             if (esp.value) {
@@ -393,7 +383,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-        </script>
+    </script>
 
 </body>
 
