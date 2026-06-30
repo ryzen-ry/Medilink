@@ -57,12 +57,12 @@ public class DataLoader implements CommandLineRunner {
             String adminPassword = System.getenv("ADMIN_PASSWORD");
             
             // ⚠️ Si no existe variable de entorno, USAR SOLO PARA DESARROLLO
-            if (adminPassword == null || adminPassword.isEmpty()) {
-                adminPassword = DEFAULT_PASS; // Solo para desarrollo local
+            if (admiPass == null || admiPass.isEmpty()) {
+                admiPass = DEFAULT_PASS; // Solo para desarrollo local
                 logger.warn("⚠️  ADVERTENCIA: Usando contraseña por defecto. Setea ADMIN_PASSWORD en producción.");
             }
             
-            admin.setPassword(BCrypt.hashpw(adminPassword, BCrypt.gensalt()));
+            admin.setPassword(BCrypt.hashpw(admiPass, BCrypt.gensalt()));
             admin.setRol(rolRepo.findByNombre(ROLE_ADMIN));
             usuarioRepo.save(admin);
             logger.info("✅ Administrador creado con éxito.");
