@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<header th:fragment="navbarUser(activePage)" id="header" class="p-3">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <a class="navbar-brand text-light fs-2 fw-bold" th:href="@{/USER/indexUser}" id="logo-bootstrap">
+                <i class="fa-solid fa-square-h text-primary"></i> MediLink
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activePage == 'inicio'} ? 'active'" th:href="@{/USER/indexUser}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activePage == 'nosotros'} ? 'active'" th:href="@{/USER/nosotrosUser}">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activePage == 'servicios'} ? 'active'" th:href="@{/USER/serviciosUser}">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activePage == 'citas'} ? 'active'" th:href="@{/USER/citasUser}">Citas</a></li>
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activePage == 'contacto'} ? 'active'" th:href="@{/USER/contactoUser}">Contacto</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <th:block th:if="${session.usuarioLogueado != null}">
+                        <span class="text-light me-3 fw-semibold">
+                            Hola, <span th:text="${session.usuarioLogueado.nombre}"></span> 👋
+                        </span>
+                        <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm">
+                            <i class="fa-solid fa-right-from-bracket me-1"></i> Cerrar Sesión
+                        </a>
+                    </th:block>
+                </div>
+            </div>
+        </nav>
+
+        <div th:if="${activePage == 'inicio'}">
+            <div class="text-center py-5 text-light">
+                <h1 class="display-3 mb-2 text-white fw-bold">Telemedicina al Alcance de Todos</h1>
+                <p class="lead text-light-50">Conectamos tu bienestar con las soluciones digitales de salud de forma inmediata, segura y confiable.</p>
+                <div class="mt-4">
+                    <a th:href="@{/USER/serviciosUser}" class="btn btn-primary btn-lg px-4 me-3 shadow">
+                        <i class="fa-solid fa-notes-medical me-2"></i> Mi Portal Clínico
+                    </a>
+                    <a th:href="@{/USER/citasUser}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="fa-solid fa-calendar-check me-2"></i> Agendar Cita
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div th:if="${activePage == 'nosotros'}">
+            <div class="text-center py-5 text-light">
+                <h1 class="display-4 mb-2 text-white fw-bold">Sobre Nuestra Institución</h1>
+                <p class="lead text-light-50">Conoce el origen, valores y equipo de liderazgo detrás de MediLink.</p>
+            </div>
+        </div>
+        <div th:if="${activePage == 'contacto'}">
+            <div class="text-center py-5 text-light">
+                <h1 class="display-4 mb-2 text-white fw-bold">Canales de Atención & Staff Médico</h1>
+                <p class="lead text-light-50">Conoce a nuestro equipo de doctores y elige el canal de soporte que prefieras.</p>
+            </div>
+        </div>
+        <div th:if="${activePage == 'citas'}">
+            <div class="text-center py-5 text-light">
+                <h1 class="display-4 mb-2 text-white fw-bold">Solicita tu Consulta Médica</h1>
+                <p class="lead text-light-50">Completa el formulario en unos segundos para programar tu cita con el especialista adecuado.</p>
+            </div>
+        </div>
+        <div th:if="${activePage == 'servicios'}">
+            <div class="text-center py-5 text-light">
+                <h1 class="display-4 mb-2 text-white fw-bold">Tus Servicios Digitales de Salud</h1>
+                <p class="lead text-light-50">Accede a videoconsultas, planes de monitoreo e historial de exámenes en tiempo real.</p>
+            </div>
+        </div>
+    </div>
+</header>
+</html>

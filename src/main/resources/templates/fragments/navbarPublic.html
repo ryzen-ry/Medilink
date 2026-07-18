@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<header th:fragment="navbarPublic(activePage)" id="header" class="p-3">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <a class="navbar-brand text-light fs-2 fw-bold" th:href="@{/}" id="logo-bootstrap">
+                <i class="fa-solid fa-square-h text-primary"></i> MediLink
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activePage == 'inicio'} ? 'active'" th:href="@{/}">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activePage == 'nosotros'} ? 'active'" th:href="@{/nosotros}">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activePage == 'servicios'} ? 'active'" th:href="@{/servicios}">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activePage == 'citas'} ? 'active'" th:href="@{/citas}">Citas</a></li>
+                    <li class="nav-item"><a class="nav-link" th:classappend="${activePage == 'contacto'} ? 'active'" th:href="@{/contacto}">Contacto</a></li>
+                </ul>
+                
+                <div class="d-flex align-items-center">
+                    <a th:href="@{/login}" class="btn btn-outline-light me-2 custom-login-btn">Iniciar Sesión</a>
+                    <a th:href="@{/registro}" class="btn btn-primary custom-register-btn">Registrarse</a>
+                </div>
+            </div>
+        </nav>
+
+        <div th:if="${activePage == 'inicio'}">
+            <div class="text-center py-5 text-light">
+                <h1 class="display-3 mb-2 text-white fw-bold">Telemedicina al Alcance de Todos</h1>
+                <p class="lead text-light-50">Conectamos tu bienestar con las soluciones digitales de salud de forma inmediata, segura y confiable.</p>
+                <div class="mt-4">
+                    <a th:href="@{/login}" class="btn btn-primary btn-lg px-4 me-3 shadow">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i> Iniciar Sesión
+                    </a>
+                    <a th:href="@{/registro}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="fa-solid fa-user-plus me-2"></i> Crear Cuenta
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div th:if="${activePage == 'nosotros'}">
+            <div class="text-center py-5 text-light">
+                <h1 class="display-4 mb-2 text-white fw-bold">Sobre Nuestra Institución</h1>
+                <p class="lead text-light-50">Conoce el origen, valores y equipo de liderazgo detrás de MediLink.</p>
+            </div>
+        </div>
+        <div th:if="${activePage == 'contacto'}">
+            <div class="text-center py-5 text-light">
+                <h1 class="display-4 mb-2 text-white fw-bold">Canales de Atención & Staff Médico</h1>
+                <p class="lead text-light-50">Conoce a nuestro equipo de doctores y elige el canal de soporte que prefieras.</p>
+            </div>
+        </div>
+    </div>
+</header>
+</html>
