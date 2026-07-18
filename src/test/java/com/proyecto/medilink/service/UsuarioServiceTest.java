@@ -78,7 +78,7 @@ class UsuarioServiceTest {
 
         assertNotNull(resultado);
         assertEquals(rolUser, resultado.getRol());
-        assertNotEquals(passwordOriginal, resultado.getPassword()); // Encriptada
+        assertNotEquals(passwordOriginal, resultado.getPassword());
         assertTrue(BCrypt.checkpw("password123", resultado.getPassword()));
         verify(usuarioRepository).save(usuario);
     }
@@ -185,6 +185,11 @@ class UsuarioServiceTest {
 
     @Test
     void testValidarCredenciales_PasswordIncorrecta_DevuelveFalse() {
+        // ✅ Generar hash válido para la prueba
+        String passwordCorrecta = "password123";
+        String hashValido = BCrypt.hashpw(passwordCorrecta, BCrypt.gensalt());
+        usuario.setPassword(hashValido);
+
         when(usuarioRepository.findByEmail(usuario.getEmail())).thenReturn(usuario);
 
         boolean resultado = usuarioService.validarCredenciales(usuario.getEmail(), "passwordIncorrecta");

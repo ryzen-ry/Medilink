@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<footer th:fragment="footer" id="footer" class="py-5">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2>¿Preguntas o comentarios? <strong>Contáctanos:</strong></h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <form method="post" action="#">
+                    <div class="mb-3">
+                        <label for="footer-name" class="visually-hidden">Nombre</label>
+                        <input id="footer-name" name="name" placeholder="Nombre" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="footer-email" class="visually-hidden">Email</label>
+                        <input id="footer-email" name="email" placeholder="Email" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="footer-message" class="visually-hidden">Mensaje</label>
+                        <textarea id="footer-message" name="message" placeholder="Mensaje" class="form-control" rows="4"></textarea>
+                    </div>
+                    <button class="btn btn-primary">Enviar Mensaje</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <p>En MediLink nos tomamos muy en serio la calidad del servicio técnico y la confidencialidad médica de nuestros usuarios. Contáctanos mediante cualquiera de los canales y un asesor te atenderá a la brevedad.</p>
+                <ul class="list-unstyled mt-3">
+                    <li class="mb-2"><strong>Dirección:</strong> 1234 Avenida Principal, Perú</li>
+                    <li class="mb-2"><strong>Teléfono:</strong> (000) 000-0000</li>
+                    <li class="mb-2"><strong>Email:</strong> <a href="mailto:info@medilink.tld">info@medilink.tld</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="copyright" class="text-center mt-5 pt-3 border-top">
+        <p class="mb-0">&copy; MediLink. Todos los derechos reservados.</p>
+    </div>
+</footer>
+</html>

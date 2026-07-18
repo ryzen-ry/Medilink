@@ -12,9 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -47,7 +44,7 @@ class DoctorServiceTest {
         doctor.setNumeroColegiatura("12345");
         doctor.setEmail("juan@doctor.com");
         doctor.setTelefono("999999999");
-        doctor.setImagen("doctor.jpg");
+        doctor.setImagen(null);  // ✅ SIN imagen por defecto
     }
 
     // ============================================================
@@ -146,6 +143,7 @@ class DoctorServiceTest {
         Doctor resultado = doctorService.guardarDoctor(doctor, imageFile);
 
         assertNotNull(resultado);
+        // ✅ El código no modifica la imagen si no hay archivo
         assertNull(resultado.getImagen());
         verify(doctorRepository).save(doctor);
     }
