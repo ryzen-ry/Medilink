@@ -22,7 +22,7 @@
 | **Curso** | Herramientas de Desarrollo |
 | **Docente** | Milla Flores, José Luis |
 | **Sección** | 23280 — Grupo 6 |
-| **Integrantes** | Antiquera Farfán, Ronaldo Isaac (U22208906) · Campos Toribio, Liliana Lilibeth · Adrián Ore, Luis Francisco |
+| **Integrantes** | Antiquera Farfán, Ronaldo Isaac · Campos Toribio, Liliana Lilibeth · Adrián Ore, Luis Francisco |
 | **Fecha de inicio** | 15/04/2026 |
 | **Fecha de finalización** | 20/07/2026 |
 
