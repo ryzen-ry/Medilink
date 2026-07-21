@@ -35,6 +35,26 @@
             border-color: var(--primary);
         }
 
+        /* ✅ RESPONSIVE: Videos más pequeños en móviles */
+        @media (max-width: 768px) {
+            #localVideo, #remoteVideo {
+                height: 220px;
+            }
+            .controls-container {
+                padding: 1rem 1.5rem !important;
+                gap: 12px !important;
+                flex-wrap: wrap;
+            }
+            .controls-container button {
+                width: 48px !important;
+                height: 48px !important;
+                font-size: 1rem !important;
+            }
+            #header .navbar-brand {
+                font-size: 1.3rem !important;
+            }
+        }
+
         .video-label {
             position: absolute;
             bottom: 20px;
