@@ -17,8 +17,12 @@ WORKDIR /app
 # Copia el JAR generado desde la etapa de build
 COPY --from=build /workspace/target/medilink-0.0.1-SNAPSHOT.jar ./app.jar
 
-# Puerto de la aplicación (Spring Boot por defecto)
+# Puerto de la aplicación (Spring Boot usa la variable PORT de Railway)
 EXPOSE 8080
 
-# Ejecuta la aplicación
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# HEALTHCHECK para que Railway sepa que la app está operativa
+HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
+  CMD java -jar /app/app.jar --health || exit 1
+
+# Ejecuta la aplicación - usa -Dserver.port para forzar el puerto de Railway
+ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT:-8080} -jar /app/app.jar"]
