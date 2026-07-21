@@ -10,7 +10,7 @@
   <a href="https://sonarcloud.io/summary/new_code?id=ryzen-ry_Medilink"><img src="https://sonarcloud.io/api/project_badges/measure?project=ryzen-ry_Medilink&metric=duplicated_lines_density" alt="Duplication"></a>
 </p>
 
-🌐 **Demo en producción:** [medilink-production-8cf3.up.railway.app](https://medilink-production-8cf3.up.railway.app/)
+🌐 **Demo en producción:** [medilink-production-8cf3.up.railway.app](https://medilink-production-9950.up.railway.app/)
 
 ---
 
@@ -132,7 +132,7 @@ Se utilizó **MySQL** como motor relacional. El modelo entidad-relación contemp
 - Flujo de integración continua (CI) en GitHub Actions con compilaciones y pruebas exitosas en cada push.
 - Análisis de calidad de código integrado con SonarCloud (ver badges de Quality Gate, Bugs, Vulnerabilities y Coverage al inicio de este README).
 - Aplicación empaquetada en Docker (multi-etapa) y verificada localmente con `docker-compose`.
-- Despliegue en producción activo en Railway: **https://medilink-production-8cf3.up.railway.app/**
+- Despliegue en producción activo en Railway: **https://medilink-production-9950.up.railway.app/**
 - Flujo de trabajo colaborativo con ramas protegidas (`main`, `develop`), revisiones obligatorias de Pull Requests y tablero Kanban en GitHub Projects.
 - 4 Releases publicados en GitHub, desde la plantilla base (`1.0`) hasta la versión operativa actual (`1.3`).
 
