@@ -55,6 +55,52 @@
             flex-direction: column;
         }
 
+        /* ✅ RESPONSIVE: Sidebar colapsable en móviles */
+        @media (max-width: 768px) {
+            #sidebar {
+                min-width: 100%;
+                max-width: 100%;
+                position: fixed;
+                z-index: 1000;
+                height: 100vh;
+                overflow-y: auto;
+                transform: translateX(-100%);
+            }
+            #sidebar.show {
+                transform: translateX(0);
+            }
+            #content {
+                padding: 1.5rem !important;
+            }
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .widget-card {
+                padding: 1rem;
+            }
+            .table th, .table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.75rem;
+            }
+            .table-responsive {
+                overflow-x: auto;
+            }
+            .d-flex.align-items-center.gap-3 {
+                flex-wrap: wrap;
+            }
+            #sidebarToggle {
+                display: block !important;
+            }
+        }
+
+        @media (min-width: 769px) {
+            #sidebarToggle {
+                display: none !important;
+            }
+        }
+
         #sidebar .sidebar-header {
             padding: 2rem 1.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -267,9 +313,14 @@
     <!-- CONTENIDO PRINCIPAL -->
     <div id="content">
         <div class="content-header">
-            <div>
-                <h4 class="mb-0 fw-bold">Panel de Administración</h4>
-                <p class="text-muted small mb-0" th:text="'Bienvenido de nuevo, ' + ${session.usuarioLogueado.nombre}"></p>
+            <div class="d-flex align-items-center gap-3">
+                <button id="sidebarToggle" class="btn btn-dark btn-sm" onclick="toggleSidebar()" style="display:none;">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <h4 class="mb-0 fw-bold">Panel de Administración</h4>
+                    <p class="text-muted small mb-0" th:text="'Bienvenido de nuevo, ' + ${session.usuarioLogueado.nombre}"></p>
+                </div>
             </div>
             
             <div class="d-flex align-items-center gap-3">
@@ -564,6 +615,10 @@
 </script>
 
 <script>
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('show');
+    }
+
     function switchTab(tabId) {
         // Ocultar todos los panes
         document.querySelectorAll('.tab-pane').forEach(function(pane) {
@@ -580,6 +635,11 @@
         
         // Colocar clase activa en el sidebar
         document.getElementById('li-' + tabId).classList.add('active');
+        
+        // En móviles, cerrar sidebar al seleccionar una opción
+        if (window.innerWidth <= 768) {
+            document.getElementById('sidebar').classList.remove('show');
+        }
     }
 </script>
 </body>
